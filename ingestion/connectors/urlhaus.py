@@ -100,6 +100,6 @@ class URLhausConnector(BaseConnector):
                 extra={
                     "url": url,
                     "url_status": status,
-                    "tags": [t.strip() for t in (row.get("tags") or "").split(",") if t.strip()],
+                "tags": row.get("tags") or [],
                 },
             )
