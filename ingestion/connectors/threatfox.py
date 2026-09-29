@@ -46,9 +46,11 @@ class ThreatFoxConnector(BaseConnector):
     async def fetch(self) -> AsyncIterator[NormalizedEvidence]:
         logger.info("ThreatFox: fetching recent IOCs")
 
+        import os
+        api_key = os.environ.get("ABUSECH_API_KEY", "")
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-            "AUTH-KEY": "42c8353e152f6106aef35f9d87d7a27124035907feff3d84"
+            "AUTH-KEY": api_key
         }
         payload = {"query": "get_iocs", "days": 1}
         

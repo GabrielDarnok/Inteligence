@@ -36,9 +36,11 @@ class URLhausConnector(BaseConnector):
     async def fetch(self) -> AsyncIterator[NormalizedEvidence]:
         logger.info("URLhaus: downloading recent URL list")
 
+        import os
+        api_key = os.environ.get("ABUSECH_API_KEY", "")
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-            "AUTH-KEY": "42c8353e152f6106aef35f9d87d7a27124035907feff3d84"
+            "AUTH-KEY": api_key
         }
         
         async with httpx.AsyncClient(timeout=120, follow_redirects=True, headers=headers) as client:
