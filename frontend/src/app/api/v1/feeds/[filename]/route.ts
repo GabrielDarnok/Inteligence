@@ -25,8 +25,9 @@ export async function GET(
     .from("assessments")
     .select(`
       indicator_id,
-      indicators ( value, type )
+      indicators!inner ( value, type )
     `)
+    .eq("indicators.type", "ipv4")
     // .eq("recommendation", "block") // Removido temporariamente para o Feed exportar tudo
     .limit(10000); // hard limit for now
 
