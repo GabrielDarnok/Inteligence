@@ -49,20 +49,19 @@ class ThreatFoxConnector(BaseConnector):
     async def fetch(self) -> AsyncIterator[NormalizedEvidence]:
         logger.info("ThreatFox: fetching recent IOCs")
 
-        async with httpx.AsyncClient(timeout=60) as client:
-            # Get IOCs from the last 7 days
-            resp = await client.post(
-                API_URL,
-                json={"query": "get_iocs", "days": 7},
-            )
+        async with httpx.AsyncClient(timeout=60, follow_redirects=True) as client:
+            resp = await client.get("https://threatfox.abuse.ch/export/json/recent/")
             resp.raise_for_status()
             data = resp.json()
 
-        if data.get("query_status") != "ok":
-            logger.error("ThreatFox: unexpected response", status=data.get("query_status"))
-            return
+        iocs = []
+        for k, v in data.items():
+            if isinstance(v, list):
+                iocs.extend(v)
+            elif isinstance(v, dict) and "ioc" in v:
+                iocs.append(v)
 
-        iocs = (data.get("data") or [])[:100]
+        iocs = iocs[:100]
         logger.info("ThreatFox: records received", count=len(iocs))
 
         for ioc in iocs:
