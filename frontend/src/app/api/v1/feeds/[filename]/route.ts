@@ -3,9 +3,9 @@ import { getSupabaseAdmin } from "@/lib/supabase";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { filename: string } }
+  { params }: { params: Promise<{ filename: string }> }
 ) {
-  const filename = params.filename; // e.g., "malicious-ip.txt" or "malicious-ip.json"
+  const { filename } = await params; // e.g., "malicious-ip.txt" or "malicious-ip.json"
   const supabase = getSupabaseAdmin();
 
   // Very basic implementation: just malicious IPv4s

@@ -5,11 +5,12 @@ import { ShieldAlert, ArrowLeft, ExternalLink, Calendar, Database, AlertTriangle
 import Link from "next/link";
 
 interface Props {
-  params: { value: string };
+  params: Promise<{ value: string }>;
 }
 
 export default async function IndicatorPage({ params }: Props) {
-  const value = decodeURIComponent(params.value);
+  const { value: encodedValue } = await params;
+  const value = decodeURIComponent(encodedValue);
   const supabase = getSupabaseAdmin();
 
   // Fetch indicator

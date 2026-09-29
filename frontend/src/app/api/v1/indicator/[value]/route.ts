@@ -3,9 +3,10 @@ import { getSupabaseAdmin } from "@/lib/supabase";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { value: string } }
+  { params }: { params: Promise<{ value: string }> }
 ) {
-  const value = decodeURIComponent(params.value);
+  const { value: encodedValue } = await params;
+  const value = decodeURIComponent(encodedValue);
   const supabase = getSupabaseAdmin();
 
   // Fetch indicator
