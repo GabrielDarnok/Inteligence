@@ -36,16 +36,17 @@ class URLhausConnector(BaseConnector):
     async def fetch(self) -> AsyncIterator[NormalizedEvidence]:
         logger.info("URLhaus: downloading recent URL list")
 
-        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "AUTH-KEY": "42c8353e152f6106aef35f9d87d7a27124035907feff3d84"
+        }
+        
         async with httpx.AsyncClient(timeout=120, follow_redirects=True, headers=headers) as client:
-            resp = await client.get(CSV_URL)
+            resp = await client.get("https://urlhaus-api.abuse.ch/v1/urls/recent/")
             resp.raise_for_status()
-            content = resp.text
+            data = resp.json()
 
-        # Skip comment lines starting with #
-        lines = [l for l in content.splitlines() if not l.startswith("#")]
-        reader = csv.DictReader(lines)
-        rows = list(reader)
+        rows = data.get("urls", [])
         logger.info("URLhaus: records received", count=len(rows))
 
         for row in rows:
@@ -59,18 +60,21 @@ class URLhausConnector(BaseConnector):
                 continue
 
             added_date = None
-            if row.get("dateadded"):
+            if row.get("date_added"):
                 try:
-                    added_date = datetime.fromisoformat(row["dateadded"].replace(" ", "T")).replace(tzinfo=timezone.utc)
+                    added_date = datetime.fromisoformat(row["date_added"].replace(" ", "T")).replace(tzinfo=timezone.utc)
                 except ValueError:
                     pass
 
-            from urllib.parse import urlparse
-            try:
-                host = urlparse(url).hostname
-            except Exception:
-                host = None
-
+            host = row.get("host")
+            if not host:
+                # fallback parsing
+                from urllib.parse import urlparse
+                try:
+                    host = urlparse(url).hostname
+                except Exception:
+                    host = None
+                    
             if not host:
                 continue
 

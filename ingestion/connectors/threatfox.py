@@ -46,19 +46,19 @@ class ThreatFoxConnector(BaseConnector):
     async def fetch(self) -> AsyncIterator[NormalizedEvidence]:
         logger.info("ThreatFox: fetching recent IOCs")
 
-        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "AUTH-KEY": "42c8353e152f6106aef35f9d87d7a27124035907feff3d84"
+        }
+        payload = {"query": "get_iocs", "days": 1}
+        
         async with httpx.AsyncClient(timeout=60, follow_redirects=True, headers=headers) as client:
-            resp = await client.get("https://threatfox.abuse.ch/export/json/recent/")
+            resp = await client.post("https://threatfox-api.abuse.ch/api/v1/", json=payload)
             resp.raise_for_status()
             data = resp.json()
             logger.info("ThreatFox: API Response Keys", keys=list(data.keys()), status=data.get("query_status"))
 
-        iocs = []
-        for k, v in data.items():
-            if isinstance(v, list):
-                iocs.extend(v)
-            elif isinstance(v, dict) and "ioc" in v:
-                iocs.append(v)
+        iocs = data.get("data", [])
 
         # Removemos o limite de 100 para puxar todos os milhares de indicadores
         logger.info("ThreatFox: records received", count=len(iocs))
