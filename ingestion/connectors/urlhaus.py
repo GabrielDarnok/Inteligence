@@ -36,7 +36,8 @@ class URLhausConnector(BaseConnector):
     async def fetch(self) -> AsyncIterator[NormalizedEvidence]:
         logger.info("URLhaus: downloading recent URL list")
 
-        async with httpx.AsyncClient(timeout=120, follow_redirects=True) as client:
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+        async with httpx.AsyncClient(timeout=120, follow_redirects=True, headers=headers) as client:
             resp = await client.get(CSV_URL)
             resp.raise_for_status()
             content = resp.text

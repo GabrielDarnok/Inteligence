@@ -46,10 +46,12 @@ class ThreatFoxConnector(BaseConnector):
     async def fetch(self) -> AsyncIterator[NormalizedEvidence]:
         logger.info("ThreatFox: fetching recent IOCs")
 
-        async with httpx.AsyncClient(timeout=60, follow_redirects=True) as client:
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+        async with httpx.AsyncClient(timeout=60, follow_redirects=True, headers=headers) as client:
             resp = await client.get("https://threatfox.abuse.ch/export/json/recent/")
             resp.raise_for_status()
             data = resp.json()
+            logger.info("ThreatFox: API Response Keys", keys=list(data.keys()), status=data.get("query_status"))
 
         iocs = []
         for k, v in data.items():
