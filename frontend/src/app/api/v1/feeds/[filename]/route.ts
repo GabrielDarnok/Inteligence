@@ -27,7 +27,7 @@ export async function GET(
       indicator_id,
       indicators ( value, type )
     `)
-    .eq("recommendation", "block")
+    // .eq("recommendation", "block") // Removido temporariamente para o Feed exportar tudo
     .limit(10000); // hard limit for now
 
   if (error || !assessments) {
