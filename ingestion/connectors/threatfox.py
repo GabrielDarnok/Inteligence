@@ -61,7 +61,7 @@ class ThreatFoxConnector(BaseConnector):
             elif isinstance(v, dict) and "ioc" in v:
                 iocs.append(v)
 
-        iocs = iocs[:100]
+        # Removemos o limite de 100 para puxar todos os milhares de indicadores
         logger.info("ThreatFox: records received", count=len(iocs))
 
         for ioc in iocs:

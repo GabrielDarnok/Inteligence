@@ -39,7 +39,7 @@ class CISAKEVConnector(BaseConnector):
             resp.raise_for_status()
             data = resp.json()
 
-        vulns = data.get("vulnerabilities", [])[:100]
+        vulns = data.get("vulnerabilities", [])
         logger.info("CISA KEV: records received", count=len(vulns))
 
         for vuln in vulns:
