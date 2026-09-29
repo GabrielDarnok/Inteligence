@@ -17,14 +17,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from config import settings
 from db import get_supabase
 from ingester import Ingester
-
-logger = structlog.get_logger()
-
-CONNECTOR_REGISTRY = {}
-
-def register_connector(cls):
-    CONNECTOR_REGISTRY[cls.slug] = cls
-    return cls
+from registry import CONNECTOR_REGISTRY
 
 def load_connectors():
     """Import all connector modules to trigger registration."""
@@ -53,6 +46,7 @@ async def run_connector(slug: str):
     connector_cls = CONNECTOR_REGISTRY[slug]
     connector = connector_cls()
 
+    logger = structlog.get_logger()
     logger.info("Starting connector", connector=slug, time=datetime.utcnow().isoformat())
 
     result = await connector.run()

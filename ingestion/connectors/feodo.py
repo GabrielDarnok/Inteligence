@@ -12,7 +12,7 @@ from typing import AsyncIterator
 
 from base_connector import BaseConnector
 from models import NormalizedEvidence, IndicatorType
-from run import register_connector
+from registry import register_connector
 
 logger = structlog.get_logger()
 
