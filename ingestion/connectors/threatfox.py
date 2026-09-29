@@ -20,9 +20,6 @@ API_URL = "https://threatfox-api.abuse.ch/api/v1/"
 TYPE_MAP = {
     "ip:port": IndicatorType.IPV4,
     "domain": IndicatorType.DOMAIN,
-    "url": IndicatorType.URL,
-    "md5_hash": IndicatorType.MD5,
-    "sha256_hash": IndicatorType.SHA256,
 }
 
 THREAT_TYPE_MAP = {
@@ -44,7 +41,7 @@ class ThreatFoxConnector(BaseConnector):
     terms_of_use = "https://threatfox.abuse.ch/api/"
     auth_required = False
     update_frequency = "daily"
-    supported_indicator_types = ["ipv4", "ipv6", "domain", "url", "md5", "sha1", "sha256"]
+    supported_indicator_types = ["ipv4", "ipv6", "domain"]
 
     async def fetch(self) -> AsyncIterator[NormalizedEvidence]:
         logger.info("ThreatFox: fetching recent IOCs")

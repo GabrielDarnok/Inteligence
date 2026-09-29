@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        connector: [threatfox, urlhaus, feodo, cisa_kev]
+        connector: [threatfox, urlhaus, feodo]
 
     steps:
       - name: Checkout

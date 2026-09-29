@@ -31,7 +31,7 @@ class URLhausConnector(BaseConnector):
     terms_of_use = "https://urlhaus.abuse.ch/api/"
     auth_required = False
     update_frequency = "daily"
-    supported_indicator_types = ["url", "domain", "ipv4"]
+    supported_indicator_types = ["ipv4", "domain"]
 
     async def fetch(self) -> AsyncIterator[NormalizedEvidence]:
         logger.info("URLhaus: downloading recent URL list")
@@ -64,11 +64,20 @@ class URLhausConnector(BaseConnector):
                 except ValueError:
                     pass
 
+            host = row.get("host", "").strip()
+            if not host:
+                continue
+
+            # Determine if host is IP or Domain (simple check)
+            import re
+            is_ip = re.match(r"^\d{1,3}(\.\d{1,3}){3}$", host)
+            indicator_type = IndicatorType.IPV4 if is_ip else IndicatorType.DOMAIN
+
             yield NormalizedEvidence(
-                indicator_value=url,
-                indicator_type=IndicatorType.URL,
+                indicator_value=host,
+                indicator_type=indicator_type,
                 source_classification=status,
-                normalized_classification="malicious_url",
+                normalized_classification="malicious_host",
                 threat_type="malware_delivery",
                 malware_family=row.get("threat") or None,
                 source_record_id=row.get("id", ""),
@@ -77,8 +86,8 @@ class URLhausConnector(BaseConnector):
                 last_seen=added_date,
                 raw_data=dict(row),
                 extra={
+                    "url": url,
                     "url_status": status,
-                    "host": row.get("host", ""),
                     "tags": [t.strip() for t in (row.get("tags") or "").split(",") if t.strip()],
                 },
             )
