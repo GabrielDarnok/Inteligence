@@ -129,7 +129,8 @@ create table public.observations (
   observed_at   timestamptz not null,
   observation_type text,                    -- "scan", "ddos", "c2_beacon", "spam", etc.
   details       jsonb default '{}',
-  created_at    timestamptz not null default now()
+  created_at    timestamptz not null default now(),
+  unique (indicator_id, source_id, observed_at)
 );
 
 comment on table public.observations is 'Individual observation events for temporal analysis';
