@@ -2,6 +2,8 @@ import { getSupabaseAdmin } from "@/lib/supabase";
 import { Source } from "@/lib/types";
 import { ExternalLink, Database, Clock, ShieldAlert } from "lucide-react";
 
+export const revalidate = 60;
+
 export default async function SourcesPage() {
   const supabase = getSupabaseAdmin();
   const { data: sources, error } = await supabase

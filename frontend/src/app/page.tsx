@@ -4,6 +4,8 @@ import StatsBar from "@/components/StatsBar";
 import RecentIndicators from "@/components/RecentIndicators";
 import { Shield, Zap, Database, Globe } from "lucide-react";
 
+export const revalidate = 60;
+
 async function getStats() {
   const [indicators, sources, evidence] = await Promise.all([
     supabase.from("indicators").select("id", { count: "exact", head: true }),
