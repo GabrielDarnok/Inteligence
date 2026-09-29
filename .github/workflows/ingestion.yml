@@ -51,8 +51,7 @@ jobs:
     name: Run Authenticated Sources
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    # Only runs when the secrets are available (won't fail on forks)
-    if: ${{ secrets.GREYNOISE_API_KEY != '' }}
+    # Runs unconditionally, the Python script handles missing keys gracefully
 
     strategy:
       fail-fast: false
