@@ -64,7 +64,12 @@ class URLhausConnector(BaseConnector):
                 except ValueError:
                     pass
 
-            host = row.get("host", "").strip()
+            from urllib.parse import urlparse
+            try:
+                host = urlparse(url).hostname
+            except Exception:
+                host = None
+
             if not host:
                 continue
 
