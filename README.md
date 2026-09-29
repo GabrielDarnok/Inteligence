@@ -1,0 +1,115 @@
+# Open Threat Intelligence Aggregator (OTI)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Next.js](https://img.shields.io/badge/Next.js-14+-black.svg)](https://nextjs.org/)
+[![Supabase](https://img.shields.io/badge/Supabase-DB-green.svg)](https://supabase.com/)
+
+An **open source Threat Intelligence aggregation platform** that centralizes information from multiple public, free, and reliable sources into a single unified layer.
+
+## The Problem
+
+An analyst evaluating an IP today must query multiple sources individually — Shadowserver, GreyNoise, ThreatFox, Spamhaus, URLhaus — each with its own format, API, terminology, and update frequency.
+
+## The Solution
+
+A single platform that:
+
+1. Automatically collects data from multiple sources
+2. Normalizes different formats
+3. Deduplicates indicators
+4. Correlates information from the same indicator
+5. Preserves the origin of each piece of information
+6. Maintains history
+7. Provides a REST API and web interface
+8. Generates explainable assessments and recommendations
+
+## Architecture (100% Serverless)
+
+The project is designed to be deployed for free (or very cheap) using modern serverless infrastructure, with no need to maintain Docker containers or virtual machines.
+
+```
+GITHUB ACTIONS (Ingestion Engine)
+    │  - Python scripts running via Cron
+    │  - Fetches data from Threat sources
+    │  - Writes directly to Supabase
+    ▼
+SUPABASE (Database)
+    │  - PostgreSQL + Row Level Security
+    │  - Stores Indicators, Evidence, Assessments
+    ▲
+    │
+VERCEL (Next.js App)
+    ├── Frontend UI (Search, Sources, Dashboards)
+    └── API Routes (/api/v1/...) for external consumption
+```
+
+## Supported Sources (MVP)
+
+| Source | Type | Auth Required |
+|---|---|---|
+| ThreatFox (abuse.ch) | IOCs, C2, Malware | No |
+| URLhaus (abuse.ch) | Malicious URLs | No |
+| Feodo Tracker (abuse.ch) | C2, Botnets | No |
+| CISA KEV | Known Exploited Vulnerabilities | No |
+| GreyNoise | Scanner / Malicious IPs | API Key (free tier) |
+| Shadowserver | DDoS, Botnets, Scanners | API Key (registration) |
+
+## Supported Indicator Types
+
+- IPv4 / IPv6 / CIDR
+- Domain
+- URL
+- MD5 / SHA1 / SHA256
+- ASN
+- Certificate
+
+## Getting Started (Deployment)
+
+### 1. Database (Supabase)
+
+1. Create a new project on [Supabase](https://supabase.com/).
+2. Go to the SQL Editor and run the contents of `supabase/schema.sql`.
+3. Go to Settings -> API and copy your `Project URL`, `anon public key`, and `service_role secret`.
+
+### 2. Frontend (Vercel)
+
+1. Fork this repository.
+2. Create a new project on [Vercel](https://vercel.com/) and link your fork.
+3. Set the Root Directory to `frontend`.
+4. Add the following Environment Variables in Vercel:
+   - `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase Project URL
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anon key
+   - `SUPABASE_SERVICE_KEY`: Your Supabase service_role key
+5. Deploy!
+
+### 3. Ingestion Engine (GitHub Actions)
+
+1. Go to your GitHub repository Settings -> Secrets and variables -> Actions.
+2. Add the following Repository Secrets:
+   - `SUPABASE_URL`: Your Supabase Project URL
+   - `SUPABASE_SERVICE_KEY`: Your Supabase service_role key
+   - `GREYNOISE_API_KEY`: (Optional) Your GreyNoise API key
+   - `SHADOWSERVER_API_KEY`: (Optional) Your Shadowserver API key
+   - `SHADOWSERVER_API_SECRET`: (Optional) Your Shadowserver API secret
+3. The ingestion engine will run automatically every 6 hours via GitHub Actions.
+4. You can also trigger it manually in the Actions tab.
+
+## API Examples
+
+The frontend hosts the public API. If your Vercel app is at `oti.vercel.app`:
+
+```http
+GET https://oti.vercel.app/api/v1/indicator/1.2.3.4
+GET https://oti.vercel.app/api/v1/assessment/1.2.3.4
+GET https://oti.vercel.app/api/v1/feeds/malicious-ip.txt
+GET https://oti.vercel.app/api/v1/feeds/malicious-ip.json
+```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+
+[MIT](LICENSE) — See also [SECURITY.md](SECURITY.md) for responsible disclosure.

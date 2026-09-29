@@ -1,0 +1,15 @@
+from supabase import create_client, Client
+from config import settings
+import structlog
+
+logger = structlog.get_logger()
+
+_client: Client | None = None
+
+
+def get_supabase() -> Client:
+    global _client
+    if _client is None:
+        _client = create_client(settings.supabase_url, settings.supabase_service_key)
+        logger.info("Supabase client initialized", url=settings.supabase_url)
+    return _client

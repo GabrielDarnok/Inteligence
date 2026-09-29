@@ -1,0 +1,85 @@
+name: Threat Intelligence Ingestion
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      connectors:
+        description: "Connectors to run (comma-separated or 'all')"
+        required: false
+        default: "all"
+
+jobs:
+  ingest:
+    name: Run Ingestion
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        connector: [threatfox, urlhaus, feodo, cisa_kev]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: ingestion/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r ingestion/requirements.txt
+
+      - name: Run connector — ${{ matrix.connector }}
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          GREYNOISE_API_KEY: ${{ secrets.GREYNOISE_API_KEY }}
+          SHADOWSERVER_API_KEY: ${{ secrets.SHADOWSERVER_API_KEY }}
+          SHADOWSERVER_API_SECRET: ${{ secrets.SHADOWSERVER_API_SECRET }}
+        run: |
+          cd ingestion
+          python run.py --connector ${{ matrix.connector }}
+
+  ingest-authenticated:
+    name: Run Authenticated Sources
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # Only runs when the secrets are available (won't fail on forks)
+    if: ${{ secrets.GREYNOISE_API_KEY != '' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        connector: [greynoise, shadowserver]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: ingestion/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r ingestion/requirements.txt
+
+      - name: Run connector — ${{ matrix.connector }}
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          GREYNOISE_API_KEY: ${{ secrets.GREYNOISE_API_KEY }}
+          SHADOWSERVER_API_KEY: ${{ secrets.SHADOWSERVER_API_KEY }}
+          SHADOWSERVER_API_SECRET: ${{ secrets.SHADOWSERVER_API_SECRET }}
+        run: |
+          cd ingestion
+          python run.py --connector ${{ matrix.connector }}
