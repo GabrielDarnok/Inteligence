@@ -37,6 +37,7 @@ def load_connectors():
 
 
 async def run_connector(slug: str):
+    logger = structlog.get_logger()
     load_connectors()
 
     if slug not in CONNECTOR_REGISTRY:
@@ -46,7 +47,6 @@ async def run_connector(slug: str):
     connector_cls = CONNECTOR_REGISTRY[slug]
     connector = connector_cls()
 
-    logger = structlog.get_logger()
     logger.info("Starting connector", connector=slug, time=datetime.utcnow().isoformat())
 
     result = await connector.run()

@@ -62,7 +62,7 @@ class ThreatFoxConnector(BaseConnector):
             logger.error("ThreatFox: unexpected response", status=data.get("query_status"))
             return
 
-        iocs = data.get("data") or []
+        iocs = (data.get("data") or [])[:100]
         logger.info("ThreatFox: records received", count=len(iocs))
 
         for ioc in iocs:

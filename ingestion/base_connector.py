@@ -52,6 +52,8 @@ class BaseConnector(ABC):
 
             result.status = "success"
         except Exception as e:
+            import structlog
+            structlog.get_logger().exception("Connector failed", error=str(e))
             result.status = "error"
             result.error_message = str(e)
         finally:

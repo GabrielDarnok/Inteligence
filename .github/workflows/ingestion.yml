@@ -56,7 +56,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        connector: [greynoise, shadowserver]
+        connector: [greynoise]
 
     steps:
       - name: Checkout
