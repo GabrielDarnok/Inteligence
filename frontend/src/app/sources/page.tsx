@@ -2,7 +2,7 @@ import { getSupabaseAdmin } from "@/lib/supabase";
 import { Source } from "@/lib/types";
 import { ExternalLink, Database, Clock, ShieldAlert } from "lucide-react";
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function SourcesPage() {
   const supabase = getSupabaseAdmin();

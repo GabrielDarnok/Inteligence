@@ -4,7 +4,7 @@ import StatsBar from "@/components/StatsBar";
 import RecentIndicators from "@/components/RecentIndicators";
 import { Shield, Zap, Database, Globe } from "lucide-react";
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 async function getStats() {
   const [indicators, sources, evidence] = await Promise.all([
