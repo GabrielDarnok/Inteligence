@@ -9,6 +9,7 @@ export default async function SourcesPage() {
   const { data: sources, error } = await supabase
     .from("sources")
     .select("*")
+    .eq("is_active", true)
     .order("name");
 
   if (error || !sources) {
