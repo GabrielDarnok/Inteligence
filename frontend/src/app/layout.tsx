@@ -39,7 +39,7 @@ export default function RootLayout({
           <p>
             Shadow Intelligence &mdash; Live telemetry and Threat Activity Monitor.{" "}
             <a
-              href="https://github.com/GabrielDarnok/Inteligence"
+              href="https://github.com/GabrielDarnok/Shadow-Intelligence"
               className="text-[#ef7c68] hover:text-[#f1735f] transition-colors"
               target="_blank"
               rel="noopener noreferrer"

@@ -10,7 +10,7 @@ const links = [
   { href: "/sources", label: "Sources", icon: ShieldAlert },
   { href: "/api-docs", label: "API", icon: Terminal },
   {
-    href: "https://github.com/GabrielDarnok/Inteligence",
+    href: "https://github.com/GabrielDarnok/Shadow-Intelligence",
     label: "GitHub",
     icon: Swords,
     external: true,

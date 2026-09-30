@@ -92,14 +92,14 @@ VERCEL (Next.js App)
 
 Shadow Intelligence natively supports automated agents (like ChatGPT, Claude, LangChain bots) via the industry standard `llms.txt`. 
 
-If your app is deployed at `inteligence.vercel.app`, agents can read `https://inteligence.vercel.app/llms.txt` to instantly understand the system and interact with the endpoints:
+If your app is deployed at `shadow-intelligence.vercel.app`, agents can read `https://shadow-intelligence.vercel.app/llms.txt` to instantly understand the system and interact with the endpoints:
 
 ```http
 # Fetch an Indicator Assessment
-GET https://inteligence.vercel.app/api/v1/indicator/1.1.1.1
+GET https://shadow-intelligence.vercel.app/api/v1/indicator/1.1.1.1
 
 # Fetch Latest Threat Types (with optional pagination & source filtering)
-GET https://inteligence.vercel.app/api/v1/threats/brute%20force?limit=10&sources=blocklist_de
+GET https://shadow-intelligence.vercel.app/api/v1/threats/brute%20force?limit=10&sources=blocklist_de
 ```
 
 ## Contributing
