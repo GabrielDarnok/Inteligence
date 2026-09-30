@@ -54,12 +54,32 @@ const endpoints = [
 # Format: IP Address
 82.158.89.252
 192.168.1.1`
+  },
+  {
+    method: "GET",
+    path: "/api/v1/threats/[type]",
+    title: "Threat Type Search",
+    description: "Search for active indicators based on a specific threat type (e.g. malware, c2, scanner, brute force).",
+    params: [
+      { name: "type", type: "string", description: "The threat type classification." },
+      { name: "limit", type: "number", description: "Optional. Maximum number of results to return (default: 50, max: 1000)." }
+    ],
+    response: `[
+  {
+    "value": "103.104.127.56",
+    "type": "ipv4",
+    "threat_type": "brute force",
+    "first_seen": "2026-09-30T12:50:23Z",
+    "last_seen": "2026-09-30T12:50:23Z",
+    "sources": ["Blocklist.de"]
+  }
+]`
   }
 ];
 
 export default function ApiDocsPage() {
   return (
-    <div className="space-y-12 fade-in max-w-4xl">
+    <div className="space-y-12 fade-in max-w-4xl mx-auto py-10">
       <div className="space-y-4 pb-4">
         <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)] flex items-center gap-2">
           <Terminal className="w-5 h-5 text-[var(--text-secondary)]" />
