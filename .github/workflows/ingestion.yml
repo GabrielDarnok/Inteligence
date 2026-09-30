@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        connector: [threatfox, urlhaus, feodo]
+        connector: [threatfox, urlhaus, feodo, blocklist_de]
 
     steps:
       - name: Checkout
@@ -57,7 +57,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        connector: [greynoise, abuseipdb]
+        connector: [greynoise, abuseipdb, alienvault]
 
     steps:
       - name: Checkout
@@ -79,6 +79,7 @@ jobs:
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           GREYNOISE_API_KEY: ${{ secrets.GREYNOISE_API_KEY }}
           ABUSEIPDB_API_KEY: ${{ secrets.ABUSEIPDB_API_KEY }}
+          ALIENVAULT_API_KEY: ${{ secrets.ALIENVAULT_API_KEY }}
           SHADOWSERVER_API_KEY: ${{ secrets.SHADOWSERVER_API_KEY }}
           SHADOWSERVER_API_SECRET: ${{ secrets.SHADOWSERVER_API_SECRET }}
         run: |
