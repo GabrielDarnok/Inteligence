@@ -58,7 +58,7 @@ export default async function RecentIndicators() {
                 </div>
               </td>
               <td className="whitespace-nowrap px-5 py-3 text-right font-mono text-[11px] text-[var(--text-secondary)]">
-                {new Date(indicator.updated_at).toLocaleString('en-US', { timeZone: 'UTC' })} UTC
+                {new Date(indicator.updated_at).toLocaleString('pt-BR', { timeZone: 'UTC' })} UTC
               </td>
             </tr>
           ))}

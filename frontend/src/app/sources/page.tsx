@@ -74,7 +74,7 @@ export default async function SourcesPage() {
               <div className="flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5" />
                 <span>
-                  {source.last_sync_at ? new Date(source.last_sync_at).toLocaleString() : "Never"}
+                  {source.last_sync_at ? `${new Date(source.last_sync_at).toLocaleString('pt-BR', { timeZone: 'UTC' })} UTC` : "Never"}
                 </span>
               </div>
               {source.last_sync_records_fetched !== null && (

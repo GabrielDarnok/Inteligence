@@ -126,11 +126,11 @@ export default async function IndicatorPage({ params }: Props) {
             <div className="space-y-4 text-[13px]">
               <div>
                 <p className="text-[var(--text-tertiary)] mb-1">First Seen</p>
-                <p className="font-mono text-[var(--text-secondary)]">{detail.first_seen ? new Date(detail.first_seen).toLocaleString() : "Unknown"}</p>
+                <p className="font-mono text-[var(--text-secondary)]">{detail.first_seen ? `${new Date(detail.first_seen).toLocaleString('pt-BR', { timeZone: 'UTC' })} UTC` : "Unknown"}</p>
               </div>
               <div>
                 <p className="text-[var(--text-tertiary)] mb-1">Last Seen</p>
-                <p className="font-mono text-[var(--text-secondary)]">{detail.last_seen ? new Date(detail.last_seen).toLocaleString() : "Unknown"}</p>
+                <p className="font-mono text-[var(--text-secondary)]">{detail.last_seen ? `${new Date(detail.last_seen).toLocaleString('pt-BR', { timeZone: 'UTC' })} UTC` : "Unknown"}</p>
               </div>
               <div>
                 <p className="text-[var(--text-tertiary)] mb-1">Total Observations</p>
@@ -201,13 +201,13 @@ export default async function IndicatorPage({ params }: Props) {
                   {ev.first_seen && (
                     <div>
                       <p className="text-[var(--text-tertiary)] mb-1">First Seen</p>
-                      <p className="font-mono text-[var(--text-secondary)]">{new Date(ev.first_seen).toLocaleDateString()}</p>
+                      <p className="font-mono text-[var(--text-secondary)]">{new Date(ev.first_seen).toLocaleDateString('pt-BR', { timeZone: 'UTC' })} UTC</p>
                     </div>
                   )}
                   {ev.last_seen && (
                     <div>
                       <p className="text-[var(--text-tertiary)] mb-1">Last Seen</p>
-                      <p className="font-mono text-[var(--text-secondary)]">{new Date(ev.last_seen).toLocaleDateString()}</p>
+                      <p className="font-mono text-[var(--text-secondary)]">{new Date(ev.last_seen).toLocaleDateString('pt-BR', { timeZone: 'UTC' })} UTC</p>
                     </div>
                   )}
                 </div>
