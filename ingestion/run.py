@@ -21,17 +21,17 @@ from registry import CONNECTOR_REGISTRY
 
 def load_connectors():
     """Import all connector modules to trigger registration."""
-    from connectors import threatfox, urlhaus, feodo, cisa_kev
+    from connectors import threatfox, urlhaus, feodo
     try:
-        from connectors import greynoise
+        from connectors import blocklist_de
     except Exception:
         pass
     try:
-        from connectors import shadowserver
+        from connectors import abuseipdb
     except Exception:
         pass
     try:
-        from connectors import spamhaus
+        from connectors import alienvault
     except Exception:
         pass
 

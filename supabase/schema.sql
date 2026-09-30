@@ -295,7 +295,7 @@ insert into public.sources (slug, name, description, website, license, auth_requ
 ('threatfox', 'ThreatFox', 'IOC database by abuse.ch — C2, malware, botnets', 'https://threatfox.abuse.ch', 'CC0', false, 'daily', array['ipv4','ipv6','domain','url','md5','sha1','sha256']),
 ('urlhaus', 'URLhaus', 'Malicious URL database by abuse.ch', 'https://urlhaus.abuse.ch', 'CC0', false, 'daily', array['url','domain','ipv4']),
 ('feodo', 'Feodo Tracker', 'C2 and botnet infrastructure tracker by abuse.ch', 'https://feodotracker.abuse.ch', 'CC0', false, 'daily', array['ipv4','domain']),
-('cisa_kev', 'CISA KEV', 'CISA Known Exploited Vulnerabilities catalog', 'https://www.cisa.gov/known-exploited-vulnerabilities-catalog', 'Public Domain', false, 'daily', array['url']),
-('greynoise', 'GreyNoise', 'Internet scanner and noise intelligence', 'https://greynoise.io', 'Commercial (free tier)', true, 'real-time', array['ipv4']),
-('shadowserver', 'Shadowserver', 'Security reports — DDoS, botnets, scanners, honeypots', 'https://www.shadowserver.org', 'Free for network operators', true, 'daily', array['ipv4','ipv6','domain','asn']),
-('spamhaus', 'Spamhaus', 'Reputation and blocklist service', 'https://www.spamhaus.org', 'Non-commercial free', true, 'real-time', array['ipv4','cidr','domain','asn']);
+('blocklist_de', 'Blocklist.de', 'Fail2Ban reporting service for SSH, Mail, and web attacks', 'https://www.blocklist.de', 'Free', false, 'daily', array['ipv4','ipv6']),
+('abuseipdb', 'AbuseIPDB', 'Crowdsourced IP abuse reporting', 'https://www.abuseipdb.com', 'Commercial (free tier)', true, 'real-time', array['ipv4','ipv6']),
+('alienvault', 'AlienVault OTX', 'Open Threat Exchange by AT&T Cybersecurity', 'https://otx.alienvault.com', 'Free', true, 'real-time', array['ipv4','ipv6','domain','url','md5','sha256']);
+

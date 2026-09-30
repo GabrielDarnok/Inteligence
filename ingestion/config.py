@@ -13,13 +13,13 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     log_file: str = "./logs/ingestion.log"
 
-    enabled_connectors: str = "threatfox,urlhaus,feodo,cisa_kev"
+    enabled_connectors: str = "threatfox,urlhaus,feodo,blocklist_de,abuseipdb,alienvault"
     schedule_cron: str = "0 */6 * * *"
 
     @property
     def enabled_connector_list(self) -> list[str]:
         if self.enabled_connectors.lower() == "all":
-            return ["threatfox", "urlhaus", "feodo", "cisa_kev", "greynoise", "shadowserver", "spamhaus"]
+            return ["threatfox", "urlhaus", "feodo", "blocklist_de", "abuseipdb", "alienvault"]
         return [c.strip() for c in self.enabled_connectors.split(",")]
 
     class Config:

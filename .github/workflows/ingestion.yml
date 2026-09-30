@@ -57,7 +57,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        connector: [greynoise, abuseipdb, alienvault]
+        connector: [abuseipdb, alienvault]
 
     steps:
       - name: Checkout
