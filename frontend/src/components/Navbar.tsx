@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Radar, Swords, ShieldAlert } from "lucide-react";
+import { Radar, Swords, ShieldAlert, Terminal } from "lucide-react";
 
 const links = [
   { href: "/", label: "Radar", icon: Radar },
   { href: "/sources", label: "Sources", icon: ShieldAlert },
+  { href: "/api-docs", label: "API", icon: Terminal },
   {
     href: "https://github.com/GabrielDarnok/Inteligence",
     label: "GitHub",
