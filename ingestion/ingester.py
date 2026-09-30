@@ -113,6 +113,14 @@ class Ingester:
         except Exception as e:
             logger.error("Failed to batch upsert observations", error=str(e))
 
+        # 4. Recompute assessments
+        unique_indicator_ids = list(set(indicator_map.values()))
+        try:
+            for ind_id in unique_indicator_ids:
+                self._recompute_assessment(ind_id)
+        except Exception as e:
+            logger.error("Failed to recompute assessments in batch", error=str(e))
+
         return outcomes
 
     async def ingest(self, evidence: NormalizedEvidence, source_slug: str) -> str:
@@ -245,6 +253,16 @@ class Ingester:
         score = min(source_count / 5.0, 1.0)
         confidence = "low" if score < 0.4 else "medium" if score < 0.7 else "high"
         recommendation = "monitor" if score < 0.4 else "block"
+        
+        # Update indicators table with aggregated data
+        self.db.table("indicators").update({
+            "is_malicious": is_malicious,
+            "confidence": confidence,
+            "recommendation": recommendation,
+            "source_count": source_count,
+            "threat_types": threat_types,
+            "malware_families": malware_families
+        }).eq("id", indicator_id).execute()
 
         # Build human-readable reasons
         reasons = []
