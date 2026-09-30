@@ -20,8 +20,10 @@ async function getStats() {
   };
 }
 
-export default async function HomePage() {
+export default async function HomePage(props: { searchParams: Promise<{ page?: string }> }) {
   const stats = await getStats();
+  const searchParams = await props.searchParams;
+  const page = Math.max(1, parseInt(searchParams?.page || "1") || 1);
 
   return (
     <div className="space-y-12">
@@ -47,13 +49,13 @@ export default async function HomePage() {
 
       {/* Recent indicators */}
       <section className="fade-in fade-in-delay-3">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.055] px-4 py-3.5 sm:px-6 mb-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border-color)] px-4 py-3.5 sm:px-6 mb-4">
           <div>
-            <h1 className="text-sm font-semibold text-slate-100">Known malicious indicators</h1>
-            <p className="mt-0.5 text-[11px] text-slate-600">Recently updated across all families</p>
+            <h1 className="text-sm font-semibold text-[var(--text-primary)]">Known malicious indicators</h1>
+            <p className="mt-0.5 text-[11px] text-[var(--text-secondary)]">Recently updated across all families</p>
           </div>
         </div>
-        <RecentIndicators />
+        <RecentIndicators page={page} />
       </section>
     </div>
   );
