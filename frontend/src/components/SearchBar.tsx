@@ -39,7 +39,7 @@ export default function SearchBar() {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search IPv4, IPv6, Domain, URL, MD5, SHA256..."
+          placeholder="Search IPv4, IPv6, Domain, URL..."
           className="w-full bg-transparent border-none outline-none py-3 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] font-mono text-[13px] search-input"
           autoFocus
         />
