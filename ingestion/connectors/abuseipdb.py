@@ -50,10 +50,14 @@ class AbuseIPDBConnector(BaseConnector):
             "limit": 10000
         }
 
-        async with httpx.AsyncClient(timeout=120, follow_redirects=True, headers=headers) as client:
-            resp = await client.get(ABUSEIPDB_URL, params=params)
-            resp.raise_for_status()
-            data = resp.json()
+        try:
+            async with httpx.AsyncClient(timeout=120, follow_redirects=True, headers=headers) as client:
+                resp = await client.get(ABUSEIPDB_URL, params=params)
+                resp.raise_for_status()
+                data = resp.json()
+        except httpx.HTTPError as e:
+            logger.warning("AbuseIPDB: API error (rate limit?)", error=str(e))
+            return
 
         records = data.get("data", [])
         logger.info("AbuseIPDB: records received", count=len(records))
