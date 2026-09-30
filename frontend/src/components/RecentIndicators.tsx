@@ -15,56 +15,49 @@ export default async function RecentIndicators() {
   }
 
   return (
-    <div className="glass-card latest-scroll min-h-0 overflow-x-auto overflow-y-auto xl:flex-1 mt-6">
+    <div className="surface-card min-h-0 overflow-x-auto overflow-y-auto xl:flex-1 mt-6 rounded-lg">
       <table className="w-full min-w-[960px] border-collapse text-left">
-        <thead className="sticky top-0 z-10 bg-[var(--bg-card)] border-b border-[var(--border-subtle)]">
+        <thead className="sticky top-0 z-10 bg-[var(--bg-surface)] border-b border-[var(--border-color)]">
           <tr>
-            <th className="px-5 py-3 text-[10px] font-medium text-slate-400 uppercase tracking-[0.2em]">Indicator</th>
-            <th className="px-5 py-3 text-[10px] font-medium text-slate-400 uppercase tracking-[0.2em]">Type</th>
-            <th className="px-5 py-3 text-[10px] font-medium text-slate-400 uppercase tracking-[0.2em]">Risk Level</th>
-            <th className="px-5 py-3 text-[10px] font-medium text-slate-400 uppercase tracking-[0.2em]">Threat Vector</th>
-            <th className="px-5 py-3 text-right text-[10px] font-medium text-slate-400 uppercase tracking-[0.2em]">Last Seen</th>
+            <th className="px-5 py-3 text-[10px] font-medium text-[var(--text-secondary)] uppercase tracking-[0.05em]">Indicator</th>
+            <th className="px-5 py-3 text-[10px] font-medium text-[var(--text-secondary)] uppercase tracking-[0.05em]">Type</th>
+            <th className="px-5 py-3 text-[10px] font-medium text-[var(--text-secondary)] uppercase tracking-[0.05em]">Risk Level</th>
+            <th className="px-5 py-3 text-[10px] font-medium text-[var(--text-secondary)] uppercase tracking-[0.05em]">Threat Vector</th>
+            <th className="px-5 py-3 text-right text-[10px] font-medium text-[var(--text-secondary)] uppercase tracking-[0.05em]">Last Seen</th>
           </tr>
         </thead>
         <tbody>
           {data.map((indicator: Indicator) => (
             <tr
               key={indicator.id}
-              className="cursor-pointer border-b border-[var(--border-subtle)] transition-colors hover:bg-white/[0.02]"
+              className="cursor-pointer border-b border-[var(--border-color)] surface-hover transition-colors"
             >
-              <td className="px-5 py-3 font-mono text-[13px] text-slate-100 group-hover:text-white">
+              <td className="px-5 py-3 font-mono text-[12px] text-[var(--text-primary)]">
                 <Link
                   href={`/indicator/${encodeURIComponent(indicator.value)}`}
-                  className="hover:text-[#06B6D4] transition-colors focus-visible:outline-2 focus-visible:outline-[#06B6D4]"
+                  className="hover:underline focus-visible:outline-2"
                 >
                   {indicator.value}
                 </Link>
               </td>
-              <td className="px-5 py-3 font-mono text-[11px] text-slate-400">
+              <td className="px-5 py-3 font-mono text-[11px] text-[var(--text-secondary)]">
                 {indicator.type.toUpperCase()}
               </td>
               <td className="px-5 py-3">
-                {indicator.recommendation === "block" ? (
-                  <span className="badge-crimson">BLOCK</span>
-                ) : indicator.recommendation === "monitor" ? (
-                  <span className="badge-amber">MONITOR</span>
-                ) : (
-                  <span className="badge-neutral">UNKNOWN</span>
-                )}
+                <span className="text-[11px] font-medium text-[var(--text-primary)] uppercase tracking-tight">
+                  {indicator.recommendation || "UNKNOWN"}
+                </span>
               </td>
-              <td className="px-5 py-3 text-[11px] text-slate-300">
-                <div className="flex flex-wrap gap-1.5">
+              <td className="px-5 py-3 text-[11px] text-[var(--text-secondary)]">
+                <div className="flex flex-wrap gap-2">
                   {indicator.threat_types?.slice(0, 3).map((t) => (
-                    <span
-                      key={t}
-                      className="rounded border border-white/[0.08] bg-white/[0.02] px-2 py-0.5 capitalize text-slate-300"
-                    >
+                    <span key={t} className="capitalize">
                       {t.replace(/_/g, ' ')}
                     </span>
                   ))}
                 </div>
               </td>
-              <td className="whitespace-nowrap px-5 py-3 text-right font-mono text-[11px] text-slate-500">
+              <td className="whitespace-nowrap px-5 py-3 text-right font-mono text-[11px] text-[var(--text-secondary)]">
                 {new Date(indicator.updated_at).toLocaleString('en-US', { timeZone: 'UTC' })} UTC
               </td>
             </tr>

@@ -30,12 +30,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.className} min-h-screen selection:bg-[#06B6D4]/30 selection:text-white glow-bg`}>
+      <body className={`${inter.className} min-h-screen selection:bg-[#333] selection:text-[#FFF] bg-[var(--bg-main)] text-[var(--text-primary)] antialiased`}>
         <Navbar />
-        <main className="dashboard-shell max-w-[1800px] mx-auto min-h-[calc(100vh-4rem)]">
+        <main className="max-w-[1400px] mx-auto min-h-[calc(100vh-4rem)]">
           {children}
         </main>
-        <footer className="border-t border-white/[0.05] mt-16 py-8 text-center text-[11px] text-slate-500">
+        <footer className="border-t border-[var(--border-color)] mt-16 py-8 text-center text-[11px] text-[var(--text-secondary)]">
           <p>
             Shadow Inteligence &mdash; Live telemetry and Threat Activity Monitor.{" "}
             <a
