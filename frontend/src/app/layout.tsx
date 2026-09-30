@@ -57,7 +57,7 @@ export default function RootLayout({
             </a>
           </p>
           <p className="mt-1 text-slate-600">
-            Data sourced from ThreatFox, URLhaus, Feodo Tracker, AbuseIPDB, Blocklist.de.
+            Data sourced from ThreatFox, URLhaus, Feodo Tracker, Blocklist.de, AlienVault.
           </p>
         </footer>
       </body>

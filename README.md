@@ -48,7 +48,6 @@ VERCEL (Next.js App)
 | Source | Type | Auth Required |
 |---|---|---|
 | AlienVault OTX | Pulses, Malware, Scanners | No |
-| AbuseIPDB | Scanners, Brute Force, Malicious IPs | No |
 | Blocklist.de | Brute Force, Botnets, Scanners | No |
 | ThreatFox (abuse.ch) | IOCs, C2, Malware | No |
 | Feodo Tracker (abuse.ch) | C2, Botnets | No |
