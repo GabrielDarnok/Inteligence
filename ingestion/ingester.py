@@ -224,67 +224,73 @@ class Ingester:
                 ignore_duplicates=True,
             ).execute()
 
-    def _recompute_assessment(self, indicator_id: str):
-        """
-        Recompute aggregated assessment from all active evidence for this indicator.
-        Simple rule-based engine — extensible later.
-        """
-        evidences = (
-            self.db.table("evidence")
-            .select("*")
-            .eq("indicator_id", indicator_id)
-            .eq("is_active", True)
-            .execute()
-        )
-        rows = evidences.data or []
-        if not rows:
+    def _recompute_assessments_batch(self, indicator_ids: list[str]):
+        if not indicator_ids:
             return
+
+        # Fetch all evidence for these indicators
+        evidences = []
+        for i in range(0, len(indicator_ids), 200):
+            chunk = indicator_ids[i:i+200]
+            res = self.db.table("evidence").select("*").in_("indicator_id", chunk).eq("is_active", True).execute()
+            if res.data:
+                evidences.extend(res.data)
+
+        # Group by indicator_id
+        grouped = {}
+        for ev in evidences:
+            grouped.setdefault(ev["indicator_id"], []).append(ev)
 
         sources = self.db.table("sources").select("id,slug,name").execute().data or []
         source_map = {s["id"]: s for s in sources}
 
-        threat_types = list({r["threat_type"] for r in rows if r.get("threat_type")})
-        malware_families = list({r["malware_family"] for r in rows if r.get("malware_family")})
-        active_source_slugs = list({source_map[r["source_id"]]["slug"] for r in rows if r["source_id"] in source_map})
-        source_count = len(active_source_slugs)
+        # Fetch original indicators to preserve required fields for upsert
+        indicators_res = []
+        for i in range(0, len(indicator_ids), 200):
+            chunk = indicator_ids[i:i+200]
+            res = self.db.table("indicators").select("id,value,type,first_seen,last_seen").in_("id", chunk).execute()
+            if res.data:
+                indicators_res.extend(res.data)
+        inds_map = {r["id"]: r for r in indicators_res}
 
-        # Simple scoring
-        is_malicious = source_count >= 1
-        score = min(source_count / 5.0, 1.0)
-        confidence = "low" if score < 0.4 else "medium" if score < 0.7 else "high"
-        recommendation = "monitor" if score < 0.4 else "block"
-        
-        # Update indicators table with aggregated data
-        self.db.table("indicators").update({
-            "is_malicious": is_malicious,
-            "confidence": confidence,
-            "recommendation": recommendation,
-            "source_count": source_count,
-            "threat_types": threat_types,
-            "malware_families": malware_families
-        }).eq("id", indicator_id).execute()
+        indicators_upserts = []
+        assessments_upserts = []
 
-        # Build human-readable reasons
-        reasons = []
-        if source_count > 1:
-            reasons.append(f"{source_count} independent sources confirmed this indicator")
-        if "c2" in threat_types or "command_and_control" in threat_types:
-            reasons.append("Known Command & Control infrastructure")
-        if "ddos" in threat_types:
-            reasons.append("DDoS activity observed")
-        if "scanner" in threat_types:
-            reasons.append("Active internet scanner")
-        if "botnet" in threat_types:
-            reasons.append("Botnet activity observed")
-        if malware_families:
-            reasons.append(f"Associated malware: {', '.join(malware_families)}")
+        for ind_id in indicator_ids:
+            rows = grouped.get(ind_id, [])
+            if not rows or ind_id not in inds_map:
+                continue
 
-        first_seen_values = [r["first_seen"] for r in rows if r.get("first_seen")]
-        last_seen_values = [r["last_seen"] for r in rows if r.get("last_seen")]
+            threat_types = list({r["threat_type"] for r in rows if r.get("threat_type")})
+            malware_families = list({r["malware_family"] for r in rows if r.get("malware_family")})
+            active_source_slugs = list({source_map[r["source_id"]]["slug"] for r in rows if r["source_id"] in source_map})
+            source_count = len(active_source_slugs)
 
-        self.db.table("assessments").upsert(
-            {
-                "indicator_id": indicator_id,
+            # Simple scoring
+            is_malicious = source_count >= 1
+            score = min(source_count / 5.0, 1.0)
+            confidence = "low" if score < 0.4 else "medium" if score < 0.7 else "high"
+            recommendation = "monitor" if score < 0.4 else "block"
+            
+            reasons = []
+            if source_count > 1:
+                reasons.append(f"{source_count} independent sources confirmed this indicator")
+            if "c2" in threat_types or "command_and_control" in threat_types:
+                reasons.append("Known Command & Control infrastructure")
+            if "ddos" in threat_types:
+                reasons.append("DDoS activity observed")
+            if "scanner" in threat_types:
+                reasons.append("Active internet scanner")
+            if "botnet" in threat_types:
+                reasons.append("Botnet activity observed")
+            if malware_families:
+                reasons.append(f"Associated malware: {', '.join(malware_families)}")
+
+            first_seen_values = [r["first_seen"] for r in rows if r.get("first_seen")]
+            last_seen_values = [r["last_seen"] for r in rows if r.get("last_seen")]
+
+            assessments_upserts.append({
+                "indicator_id": ind_id,
                 "is_malicious": is_malicious,
                 "confidence": confidence,
                 "confidence_score": round(score, 4),
@@ -297,18 +303,27 @@ class Ingester:
                 "first_seen": min(first_seen_values) if first_seen_values else None,
                 "last_seen": max(last_seen_values) if last_seen_values else None,
                 "computed_at": datetime.utcnow().isoformat(),
-            },
-            on_conflict="indicator_id",
-        ).execute()
+            })
 
-        # Also update aggregate fields on the indicator itself
-        self.db.table("indicators").update(
-            {
+            payload = inds_map[ind_id].copy()
+            payload.update({
                 "is_malicious": is_malicious,
                 "confidence": confidence,
                 "recommendation": recommendation,
                 "source_count": source_count,
                 "threat_types": threat_types,
                 "malware_families": malware_families,
-            }
-        ).eq("id", indicator_id).execute()
+            })
+            indicators_upserts.append(payload)
+
+        # Batch upsert indicators
+        for i in range(0, len(indicators_upserts), 1000):
+            self.db.table("indicators").upsert(
+                indicators_upserts[i:i+1000], on_conflict="type,value"
+            ).execute()
+
+        # Batch upsert assessments
+        for i in range(0, len(assessments_upserts), 1000):
+            self.db.table("assessments").upsert(
+                assessments_upserts[i:i+1000], on_conflict="indicator_id"
+            ).execute()
