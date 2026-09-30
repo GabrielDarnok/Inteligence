@@ -64,9 +64,9 @@ async def run_connector(slug: str):
 
     # Persist run log to Supabase
     db = get_supabase()
-    source_row = db.table("sources").select("id").eq("slug", slug).single().execute()
-    if source_row.data:
-        source_id = source_row.data["id"]
+    source_row = db.table("sources").select("id").eq("slug", slug).execute()
+    if source_row.data and len(source_row.data) > 0:
+        source_id = source_row.data[0]["id"]
         db.table("ingestion_runs").insert({
             "source_id": source_id,
             "started_at": result.started_at.isoformat(),

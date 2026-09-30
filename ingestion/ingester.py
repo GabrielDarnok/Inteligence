@@ -13,6 +13,7 @@ logger = structlog.get_logger()
 class Ingester:
     def __init__(self):
         self.db = get_supabase()
+        self._source_cache = {}
 
     async def ingest(self, evidence: NormalizedEvidence, source_slug: str) -> str:
         """
@@ -36,8 +37,14 @@ class Ingester:
             return "error"
 
     def _get_source_id(self, slug: str) -> str | None:
-        row = self.db.table("sources").select("id").eq("slug", slug).single().execute()
-        return row.data["id"] if row.data else None
+        if slug in self._source_cache:
+            return self._source_cache[slug]
+            
+        row = self.db.table("sources").select("id").eq("slug", slug).execute()
+        if row.data and len(row.data) > 0:
+            self._source_cache[slug] = row.data[0]["id"]
+            return self._source_cache[slug]
+        return None
 
     def _upsert_indicator(self, evidence: NormalizedEvidence) -> str:
         row = (
