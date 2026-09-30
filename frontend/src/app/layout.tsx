@@ -46,6 +46,15 @@ export default function RootLayout({
             >
               GitHub
             </a>
+            {" • "}
+            <a
+              href="/llms.txt"
+              className="text-[#ef7c68] hover:text-[#f1735f] transition-colors"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              llms.txt (AI Agents)
+            </a>
           </p>
           <p className="mt-1 text-slate-600">
             Data sourced from ThreatFox, URLhaus, Feodo Tracker, AbuseIPDB, Blocklist.de.
