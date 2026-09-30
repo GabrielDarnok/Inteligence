@@ -57,7 +57,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        connector: [greynoise]
+        connector: [greynoise, abuseipdb]
 
     steps:
       - name: Checkout
@@ -78,6 +78,7 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           GREYNOISE_API_KEY: ${{ secrets.GREYNOISE_API_KEY }}
+          ABUSEIPDB_API_KEY: ${{ secrets.ABUSEIPDB_API_KEY }}
           SHADOWSERVER_API_KEY: ${{ secrets.SHADOWSERVER_API_KEY }}
           SHADOWSERVER_API_SECRET: ${{ secrets.SHADOWSERVER_API_SECRET }}
         run: |
