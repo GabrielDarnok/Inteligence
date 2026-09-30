@@ -38,17 +38,25 @@ class BaseConnector(ABC):
         ingester = Ingester()
 
         try:
+            batch = []
             async for evidence in self.fetch():
-                outcome = await ingester.ingest(evidence, self.slug)
-                result.records_fetched += 1
-                if outcome == "new":
-                    result.records_new += 1
-                elif outcome == "updated":
-                    result.records_updated += 1
-                elif outcome == "skipped":
-                    result.records_skipped += 1
-                else:
-                    result.records_error += 1
+                batch.append(evidence)
+                if len(batch) >= 1000:
+                    outcomes = await ingester.ingest_batch(batch, self.slug)
+                    result.records_fetched += len(batch)
+                    result.records_new += outcomes["new"]
+                    result.records_updated += outcomes["updated"]
+                    result.records_skipped += outcomes["skipped"]
+                    result.records_error += outcomes["error"]
+                    batch = []
+
+            if batch:
+                outcomes = await ingester.ingest_batch(batch, self.slug)
+                result.records_fetched += len(batch)
+                result.records_new += outcomes["new"]
+                result.records_updated += outcomes["updated"]
+                result.records_skipped += outcomes["skipped"]
+                result.records_error += outcomes["error"]
 
             result.status = "success"
         except Exception as e:

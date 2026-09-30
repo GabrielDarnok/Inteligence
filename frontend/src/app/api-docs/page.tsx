@@ -62,7 +62,8 @@ const endpoints = [
     description: "Search for active indicators based on a specific threat type (e.g. malware, c2, scanner, brute force).",
     params: [
       { name: "type", type: "string", description: "The threat type classification." },
-      { name: "limit", type: "number", description: "Optional. Maximum number of results to return (default: 50, max: 1000)." }
+      { name: "limit", type: "number", description: "Optional. Maximum number of results to return (default: 50, max: 1000)." },
+      { name: "sources", type: "string", description: "Optional. Comma-separated list of source slugs to filter by (e.g. abuseipdb,threatfox)." }
     ],
     response: `[
   {

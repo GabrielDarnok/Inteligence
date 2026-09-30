@@ -45,7 +45,6 @@ class AlienVaultOTXConnector(BaseConnector):
         }
         
         params = {
-            "limit": 20,
             "modified_since": (datetime.utcnow() - __import__("datetime").timedelta(days=7)).isoformat()
         }
 

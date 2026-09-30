@@ -15,6 +15,106 @@ class Ingester:
         self.db = get_supabase()
         self._source_cache = {}
 
+    async def ingest_batch(self, evidences: list[NormalizedEvidence], source_slug: str):
+        """
+        Persist a batch of evidence records efficiently.
+        Returns outcome counts.
+        """
+        outcomes = {"new": 0, "updated": 0, "skipped": 0, "error": 0}
+        
+        if not evidences:
+            return outcomes
+
+        source_id = self._get_source_id(source_slug)
+        if not source_id:
+            logger.warning("Source not found", slug=source_slug)
+            outcomes["error"] += len(evidences)
+            return outcomes
+
+        # 1. Upsert indicators
+        indicator_payloads = []
+        for ev in evidences:
+            indicator_payloads.append({
+                "value": ev.indicator_value,
+                "type": ev.indicator_type.value,
+                "first_seen": ev.first_seen.isoformat() if ev.first_seen else None,
+                "last_seen": ev.last_seen.isoformat() if ev.last_seen else None,
+            })
+        
+        # We need to upsert in chunks because Supabase limits large payloads
+        # We'll map value -> id to use in evidence
+        indicator_map = {}
+        try:
+            for i in range(0, len(indicator_payloads), 1000):
+                chunk = indicator_payloads[i:i+1000]
+                res = self.db.table("indicators").upsert(chunk, on_conflict="type,value").execute()
+                for row in res.data:
+                    indicator_map[row["value"]] = row["id"]
+        except Exception as e:
+            logger.error("Failed to batch upsert indicators", error=str(e))
+            outcomes["error"] += len(evidences)
+            return outcomes
+
+        # 2. Upsert evidence
+        evidence_payloads = []
+        for ev in evidences:
+            ind_id = indicator_map.get(ev.indicator_value)
+            if not ind_id:
+                continue
+                
+            evidence_payloads.append({
+                "indicator_id": ind_id,
+                "source_id": source_id,
+                "source_classification": ev.source_classification,
+                "normalized_classification": ev.normalized_classification,
+                "threat_type": ev.threat_type,
+                "malware_family": ev.malware_family,
+                "source_record_id": ev.source_record_id or "",
+                "source_url": ev.source_url,
+                "first_seen": ev.first_seen.isoformat() if ev.first_seen else None,
+                "last_seen": ev.last_seen.isoformat() if ev.last_seen else None,
+                "expires_at": ev.expires_at.isoformat() if ev.expires_at else None,
+                "raw_data": ev.raw_data or {},
+                "extra": ev.extra or {},
+                "collected_at": datetime.utcnow().isoformat(),
+                "is_active": True,
+            })
+
+        try:
+            for i in range(0, len(evidence_payloads), 1000):
+                chunk = evidence_payloads[i:i+1000]
+                self.db.table("evidence").upsert(chunk, on_conflict="indicator_id,source_id,source_record_id").execute()
+                # We'll just mark them as updated for simplicity in batch processing
+                outcomes["updated"] += len(chunk)
+        except Exception as e:
+            logger.error("Failed to batch upsert evidence", error=str(e))
+        
+        # 3. Upsert observations
+        observation_payloads = []
+        for ev in evidences:
+            if not ev.last_seen:
+                continue
+            ind_id = indicator_map.get(ev.indicator_value)
+            if not ind_id:
+                continue
+                
+            observation_payloads.append({
+                "indicator_id": ind_id,
+                "source_id": source_id,
+                "observed_at": ev.last_seen.isoformat(),
+                "observation_type": ev.threat_type,
+                "details": ev.extra or {},
+            })
+            
+        try:
+            for i in range(0, len(observation_payloads), 1000):
+                chunk = observation_payloads[i:i+1000]
+                self.db.table("observations").upsert(chunk, on_conflict="indicator_id,source_id,observed_at", ignore_duplicates=True).execute()
+        except Exception as e:
+            logger.error("Failed to batch upsert observations", error=str(e))
+
+        return outcomes
+
     async def ingest(self, evidence: NormalizedEvidence, source_slug: str) -> str:
         """
         Persist one evidence record.

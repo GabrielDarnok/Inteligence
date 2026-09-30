@@ -9,13 +9,26 @@ export async function GET(
   const threatType = decodeURIComponent(encodedType).toLowerCase();
   const supabase = getSupabaseAdmin();
   
-  // Get limit from URL, default to 50
   const url = new URL(request.url);
   const limitParam = url.searchParams.get("limit");
   const limit = limitParam ? Math.min(parseInt(limitParam) || 50, 1000) : 50;
+  
+  const sourcesParam = url.searchParams.get("sources");
+  let sourceIds: string[] = [];
+  
+  if (sourcesParam) {
+    const slugs = sourcesParam.split(",").map(s => s.trim().toLowerCase());
+    const { data: sourcesData } = await supabase.from("sources").select("id, slug").in("slug", slugs);
+    if (sourcesData && sourcesData.length > 0) {
+      sourceIds = sourcesData.map(s => s.id);
+    } else {
+      // If requested sources don't exist, return empty array immediately
+      return NextResponse.json([]);
+    }
+  }
 
   // Fetch evidence with matching threat_type
-  const { data: evidences, error } = await supabase
+  let query = supabase
     .from("evidence")
     .select(`
       threat_type,
@@ -26,13 +39,19 @@ export async function GET(
         type
       ),
       sources (
-        name
+        name,
+        slug
       )
     `)
     .eq("is_active", true)
     .eq("threat_type", threatType)
-    .order("last_seen", { ascending: false })
-    .limit(limit);
+    .order("last_seen", { ascending: false });
+    
+  if (sourceIds.length > 0) {
+    query = query.in("source_id", sourceIds);
+  }
+  
+  const { data: evidences, error } = await query.limit(limit);
 
   if (error) {
     return NextResponse.json(
