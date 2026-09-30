@@ -8,17 +8,16 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Shadow Inteligence",
   description:
-    "A live view of attack observations, C2 botnets, and malicious indicators across the global network.",
+    "A live view of threat observations and malicious indicators across the global network.",
   keywords: [
     "threat intelligence",
     "IOC",
     "malware",
-    "C2",
     "cybersecurity",
-    "botnet",
+    "OSINT",
   ],
   openGraph: {
-    title: "Shadow Inteligence — Live attack telemetry",
+    title: "Shadow Inteligence — Threat Intelligence Platform",
     description: "Search threat indicators across multiple public sources",
     type: "website",
   },

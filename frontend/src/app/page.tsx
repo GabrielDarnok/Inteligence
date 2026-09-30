@@ -29,13 +29,13 @@ export default async function HomePage() {
       <section className="space-y-6 pt-12 pb-8 fade-in text-center flex flex-col items-center">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#06B6D4]/20 bg-[#06B6D4]/5 text-[#06B6D4] text-xs font-medium mb-2">
           <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4] pulse-dot" />
-          SOC Dashboard
+          Intelligence Platform
         </div>
         <h1 className="text-4xl sm:text-6xl font-bold tracking-tight">
           <span className="gradient-text-cyan">Global Threat Radar</span>
         </h1>
         <p className="text-slate-400 text-sm sm:text-base max-w-2xl leading-relaxed">
-          Aggregating and normalizing malicious IPs, botnet C2s, and attack observations from top global intelligence feeds in real-time.
+          Aggregating and normalizing malicious IPs, URLs, and domains from top global intelligence feeds in real-time.
         </p>
       </section>
 

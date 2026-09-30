@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import { Radar, Swords, ShieldAlert } from "lucide-react";
 
 const links = [
-  { href: "/", label: "Live", icon: Radar },
-  { href: "/api/v1/feeds/malicious-ip.txt", label: "BGP Feed", icon: ShieldAlert, external: true },
+  { href: "/", label: "Radar", icon: Radar },
+  { href: "/sources", label: "Sources", icon: ShieldAlert },
   {
     href: "https://github.com/GabrielDarnok/Inteligence",
     label: "GitHub",
