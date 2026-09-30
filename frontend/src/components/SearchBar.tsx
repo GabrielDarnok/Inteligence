@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Loader2 } from "lucide-react";
+import { Terminal, Loader2 } from "lucide-react";
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
@@ -33,7 +33,7 @@ export default function SearchBar() {
     >
       <div className="relative flex items-center w-full surface-card rounded-lg overflow-hidden focus-within:border-[#444] transition-colors">
         <div className="pl-4 pr-3 text-[var(--text-secondary)]">
-          <Search className="w-4 h-4" />
+          <Terminal className="w-4 h-4" />
         </div>
         <input
           type="text"

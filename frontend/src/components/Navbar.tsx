@@ -24,9 +24,9 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 shrink-0 border-b border-[var(--border-color)] bg-[var(--bg-main)]">
       <div className="mx-auto flex max-w-[1400px] flex-wrap items-center px-4 sm:px-6">
         <div aria-label="Shadow Inteligence" className="order-1 flex h-14 items-center">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <Image src="/logo.jpg" alt="Logo" width={22} height={22} className="rounded-sm opacity-90 group-hover:opacity-100 transition-opacity" />
-            <span className="text-[13px] font-medium tracking-tight text-[var(--text-primary)]">
+          <Link href="/" className="flex items-center gap-3 group">
+            <Image src="/logo.jpg" alt="Logo" width={32} height={32} className="rounded-sm opacity-90 group-hover:opacity-100 transition-opacity" />
+            <span className="text-[14px] font-medium tracking-tight text-[var(--text-primary)]">
               Shadow Inteligence
             </span>
           </Link>
