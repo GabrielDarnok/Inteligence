@@ -116,8 +116,7 @@ class Ingester:
         # 4. Recompute assessments
         unique_indicator_ids = list(set(indicator_map.values()))
         try:
-            for ind_id in unique_indicator_ids:
-                self._recompute_assessment(ind_id)
+            self._recompute_assessments_batch(unique_indicator_ids)
         except Exception as e:
             logger.error("Failed to recompute assessments in batch", error=str(e))
 
@@ -137,7 +136,7 @@ class Ingester:
             indicator_id = self._upsert_indicator(evidence)
             outcome = self._upsert_evidence(evidence, indicator_id, source_id)
             self._upsert_observation(evidence, indicator_id, source_id)
-            self._recompute_assessment(indicator_id)
+            self._recompute_assessments_batch([indicator_id])
             return outcome
 
         except Exception as e:
