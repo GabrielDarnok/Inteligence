@@ -11,7 +11,7 @@ export default async function RecentIndicators({ page = 1 }: { page?: number }) 
 
   const { data, error, count } = await supabase
     .from("indicators")
-    .select("*", { count: "exact" })
+    .select("*, assessments(active_sources)", { count: "exact" })
     .order("updated_at", { ascending: false })
     .range(offset, offset + limit - 1);
 
@@ -32,46 +32,71 @@ export default async function RecentIndicators({ page = 1 }: { page?: number }) 
               <th className="px-5 py-3 text-[10px] font-medium text-[var(--text-secondary)] uppercase tracking-[0.05em]">Indicator</th>
               <th className="px-5 py-3 text-[10px] font-medium text-[var(--text-secondary)] uppercase tracking-[0.05em]">Type</th>
               <th className="px-5 py-3 text-[10px] font-medium text-[var(--text-secondary)] uppercase tracking-[0.05em]">Risk Level</th>
+              <th className="px-5 py-3 text-[10px] font-medium text-[var(--text-secondary)] uppercase tracking-[0.05em]">Sources</th>
               <th className="px-5 py-3 text-[10px] font-medium text-[var(--text-secondary)] uppercase tracking-[0.05em]">Threat Vector</th>
               <th className="px-5 py-3 text-right text-[10px] font-medium text-[var(--text-secondary)] uppercase tracking-[0.05em]">Last Seen</th>
             </tr>
           </thead>
           <tbody>
-            {data.map((indicator: Indicator) => (
-              <tr
-                key={indicator.id}
-                className="cursor-pointer border-b border-[var(--border-color)] surface-hover transition-colors"
-              >
-                <td className="px-5 py-3 font-mono text-[12px] text-[var(--text-primary)]">
-                  <Link
-                    href={`/indicator/${encodeURIComponent(indicator.value)}`}
-                    className="hover:underline focus-visible:outline-2"
-                  >
-                    {indicator.value}
-                  </Link>
-                </td>
-                <td className="px-5 py-3 font-mono text-[11px] text-[var(--text-secondary)]">
-                  {indicator.type.toUpperCase()}
-                </td>
-                <td className="px-5 py-3">
-                  <span className="text-[11px] font-medium text-[var(--text-primary)] uppercase tracking-tight">
-                    {indicator.recommendation || "UNKNOWN"}
-                  </span>
-                </td>
-                <td className="px-5 py-3 text-[11px] text-[var(--text-secondary)]">
-                  <div className="flex flex-wrap gap-2">
-                    {indicator.threat_types?.slice(0, 3).map((t) => (
-                      <span key={t} className="capitalize">
-                        {t.replace(/_/g, ' ')}
-                      </span>
-                    ))}
-                  </div>
-                </td>
-                <td className="whitespace-nowrap px-5 py-3 text-right font-mono text-[11px] text-[var(--text-secondary)]">
-                  {new Date(indicator.updated_at).toLocaleString('pt-BR', { timeZone: 'UTC' })} UTC
-                </td>
-              </tr>
-            ))}
+            {data.map((indicator: any) => {
+              const activeSources = Array.isArray(indicator.assessments) 
+                ? indicator.assessments[0]?.active_sources || []
+                : indicator.assessments?.active_sources || [];
+
+              return (
+                <tr
+                  key={indicator.id}
+                  className="cursor-pointer border-b border-[var(--border-color)] surface-hover transition-colors"
+                >
+                  <td className="px-5 py-3 font-mono text-[12px] text-[var(--text-primary)]">
+                    <Link
+                      href={`/indicator/${encodeURIComponent(indicator.value)}`}
+                      className="hover:underline focus-visible:outline-2"
+                    >
+                      {indicator.value}
+                    </Link>
+                  </td>
+                  <td className="px-5 py-3 font-mono text-[11px] text-[var(--text-secondary)]">
+                    {indicator.type.toUpperCase()}
+                  </td>
+                  <td className="px-5 py-3">
+                    <span className="text-[11px] font-medium text-[var(--text-primary)] uppercase tracking-tight">
+                      {indicator.recommendation || "UNKNOWN"}
+                    </span>
+                  </td>
+                  <td className="px-5 py-3 text-[11px] text-[var(--text-secondary)]">
+                    <div className="flex flex-wrap gap-1">
+                      {activeSources.length > 0 ? (
+                        activeSources.slice(0, 3).map((s: string) => (
+                          <span key={s} className="px-1.5 py-0.5 rounded-sm bg-white/5 border border-white/10 capitalize text-[10px]">
+                            {s.replace(/_/g, ' ')}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-[var(--text-tertiary)]">-</span>
+                      )}
+                      {activeSources.length > 3 && (
+                        <span className="px-1.5 py-0.5 rounded-sm text-[10px] text-[var(--text-tertiary)]">
+                          +{activeSources.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-5 py-3 text-[11px] text-[var(--text-secondary)]">
+                    <div className="flex flex-wrap gap-2">
+                      {indicator.threat_types?.slice(0, 3).map((t: string) => (
+                        <span key={t} className="capitalize">
+                          {t.replace(/_/g, ' ')}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="whitespace-nowrap px-5 py-3 text-right font-mono text-[11px] text-[var(--text-secondary)]">
+                    {new Date(indicator.updated_at).toLocaleString('pt-BR', { timeZone: 'UTC' })} UTC
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
