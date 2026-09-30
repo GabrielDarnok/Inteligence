@@ -45,13 +45,18 @@ class AlienVaultOTXConnector(BaseConnector):
         }
         
         params = {
-            "limit": 20
+            "limit": 20,
+            "modified_since": (datetime.utcnow() - __import__("datetime").timedelta(days=7)).isoformat()
         }
 
-        async with httpx.AsyncClient(timeout=120, follow_redirects=True, headers=headers) as client:
-            resp = await client.get(OTX_URL, params=params)
-            resp.raise_for_status()
-            data = resp.json()
+        try:
+            async with httpx.AsyncClient(timeout=120, follow_redirects=True, headers=headers) as client:
+                resp = await client.get(OTX_URL, params=params)
+                resp.raise_for_status()
+                data = resp.json()
+        except httpx.HTTPError as e:
+            logger.warning("AlienVault OTX: API error", error=str(e))
+            return
 
         pulses = data.get("results", [])
         logger.info("AlienVault OTX: pulses received", count=len(pulses))
