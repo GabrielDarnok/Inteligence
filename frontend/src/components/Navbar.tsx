@@ -2,15 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Shield } from "lucide-react";
+import { Radar, Swords, ShieldAlert } from "lucide-react";
 
 const links = [
-  { href: "/", label: "Search" },
-  { href: "/sources", label: "Sources" },
-  { href: "/api/v1/feeds/malicious-ip.txt", label: "Feeds", external: true },
+  { href: "/", label: "Live", icon: Radar },
+  { href: "/api/v1/feeds/malicious-ip.txt", label: "BGP Feed", icon: ShieldAlert, external: true },
   {
-    href: "https://github.com/your-org/open-threat-intelligence-aggregator",
+    href: "https://github.com/GabrielDarnok/Inteligence",
     label: "GitHub",
+    icon: Swords,
     external: true,
   },
 ];
@@ -19,48 +19,63 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <header className="border-b border-white/5 bg-[#0a0e1a]/80 backdrop-blur-xl sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-7 h-7 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center group-hover:border-blue-400/50 transition-colors">
-            <Shield className="w-4 h-4 text-blue-400" />
-          </div>
-          <span className="font-semibold text-sm tracking-tight">
-            <span className="text-white">OTI</span>
-            <span className="text-gray-500 ml-1 font-normal hidden sm:inline">
-              Open Threat Intelligence
+    <nav className="sticky top-0 z-50 shrink-0 border-b border-white/[0.065] bg-[#080c11]/90 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-[1800px] flex-wrap items-center px-4 sm:px-6">
+        <div aria-label="Shadow Inteligence Activity Monitor" className="order-1 flex h-16 items-center">
+          <Link href="/" className="flex items-center gap-2 group">
+            <span className="text-[15px] font-semibold tracking-[-0.02em] text-white">
+              Shadow Inteligence<span className="font-normal text-slate-500 ml-1">Botnet Activity Monitor</span>
             </span>
-          </span>
-        </Link>
-
-        <nav className="flex items-center gap-1">
-          {links.map((link) =>
-            link.external ? (
+          </Link>
+        </div>
+        
+        <div className="order-2 mx-8 hidden h-5 w-px bg-white/[0.07] md:block"></div>
+        
+        <div className="order-4 flex w-full items-center gap-2 border-t border-white/[0.05] sm:gap-6 md:order-3 md:w-auto md:border-t-0 lg:gap-8">
+          {links.map((link) => {
+            const Icon = link.icon;
+            const isActive = pathname === link.href;
+            
+            return link.external ? (
               <a
                 key={link.href}
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3 py-1.5 text-sm text-gray-400 hover:text-gray-200 transition-colors rounded-md hover:bg-white/5"
+                className="flex h-11 items-center gap-1.5 border-b px-0 text-xs sm:gap-2 sm:text-sm font-medium transition-colors sm:px-1 md:h-16 border-transparent text-slate-500 hover:text-slate-300"
               >
-                {link.label}
+                <Icon className="w-3.5 h-3.5" />
+                <span className="sm:hidden">{link.label}</span>
+                <span className="hidden sm:inline">{link.label}</span>
               </a>
             ) : (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-3 py-1.5 text-sm transition-colors rounded-md ${
-                  pathname === link.href
-                    ? "text-white bg-white/8"
-                    : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
+                className={`flex h-11 items-center gap-1.5 border-b px-0 text-xs sm:gap-2 sm:text-sm font-medium transition-colors sm:px-1 md:h-16 ${
+                  isActive
+                    ? "border-[#ef7c68] text-slate-100"
+                    : "border-transparent text-slate-500 hover:text-slate-300"
                 }`}
               >
-                {link.label}
+                <Icon className="w-3.5 h-3.5" />
+                <span className="sm:hidden">{link.label}</span>
+                <span className="hidden sm:inline">{link.label}</span>
               </Link>
-            )
-          )}
-        </nav>
+            );
+          })}
+        </div>
+        
+        <div className="dashboard-nav-status order-3 ml-auto flex min-h-16 flex-wrap items-center justify-end gap-x-5 gap-y-3 py-3 md:order-4">
+          <span className="hidden text-[11px] text-slate-500 sm:inline flex items-center gap-1.5">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ef7c68] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ef7c68]"></span>
+            </span>
+            SYSTEM ONLINE
+          </span>
+        </div>
       </div>
-    </header>
+    </nav>
   );
 }

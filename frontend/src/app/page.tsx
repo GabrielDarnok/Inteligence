@@ -49,53 +49,33 @@ export default async function HomePage() {
   return (
     <div className="space-y-12">
       {/* Hero */}
-      <section className="text-center space-y-6 pt-8 pb-4 fade-in">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/20 bg-blue-500/5 text-blue-300 text-xs font-medium mb-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-400 pulse-dot" />
-          Open Source · Free · Community Driven
-        </div>
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
-          <span className="gradient-text">Open Threat Intelligence</span>
+      <section className="space-y-4 pt-6 pb-2 fade-in">
+        <h1 className="text-sm font-semibold text-slate-100 uppercase tracking-widest">
+          Live Threat Telemetry
         </h1>
-        <p className="text-gray-400 text-lg max-w-xl mx-auto leading-relaxed">
-          Search IPs, domains, URLs, and hashes across multiple public threat
-          intelligence sources — unified, normalized, and free.
+        <p className="text-slate-500 text-xs max-w-3xl leading-relaxed">
+          Aggregating and normalizing malicious IPs, botnet C2s, and attack observations from ThreatFox, URLhaus, Feodo Tracker, AbuseIPDB, and Blocklist.de.
         </p>
       </section>
 
-      {/* Search */}
-      <section className="fade-in fade-in-delay-1">
-        <SearchBar />
-      </section>
-
       {/* Stats */}
-      <section className="fade-in fade-in-delay-2">
+      <section className="fade-in fade-in-delay-1">
         <StatsBar stats={stats} />
       </section>
 
-      {/* Features */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 fade-in fade-in-delay-3">
-        {features.map((f) => (
-          <div
-            key={f.title}
-            className="glass rounded-xl p-5 space-y-3 hover:bg-white/5 transition-colors"
-          >
-            <div className="w-9 h-9 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-              <f.icon className="w-4.5 h-4.5 text-blue-400" />
-            </div>
-            <div>
-              <p className="font-semibold text-sm text-white">{f.title}</p>
-              <p className="text-xs text-gray-500 mt-1 leading-relaxed">{f.desc}</p>
-            </div>
-          </div>
-        ))}
+      {/* Search */}
+      <section className="fade-in fade-in-delay-2">
+        <SearchBar />
       </section>
 
       {/* Recent indicators */}
-      <section>
-        <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
-          Recently Updated
-        </h2>
+      <section className="fade-in fade-in-delay-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.055] px-4 py-3.5 sm:px-6 mb-4">
+          <div>
+            <h1 className="text-sm font-semibold text-slate-100">Known malicious indicators</h1>
+            <p className="mt-0.5 text-[11px] text-slate-600">Recently updated across all families</p>
+          </div>
+        </div>
         <RecentIndicators />
       </section>
     </div>

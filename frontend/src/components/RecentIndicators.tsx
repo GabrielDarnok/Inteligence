@@ -15,73 +15,62 @@ export default async function RecentIndicators() {
   }
 
   return (
-    <div className="glass rounded-xl overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm whitespace-nowrap">
-          <thead className="bg-white/5 border-b border-white/10 text-gray-400">
-            <tr>
-              <th className="px-4 py-3 font-medium">Indicator</th>
-              <th className="px-4 py-3 font-medium">Type</th>
-              <th className="px-4 py-3 font-medium">Assessment</th>
-              <th className="px-4 py-3 font-medium">Sources</th>
-              <th className="px-4 py-3 font-medium">Threats</th>
-              <th className="px-4 py-3 font-medium">Updated</th>
+    <div className="latest-scroll min-h-0 overflow-x-auto overflow-y-auto xl:flex-1">
+      <table className="w-full min-w-[960px] border-collapse text-left">
+        <thead className="sticky top-0 z-10 bg-[#080c11]/95 backdrop-blur-xl">
+          <tr className="border-b border-white/[0.055]">
+            <th className="px-4 py-2 text-[10px] font-medium text-slate-600 uppercase tracking-[0.14em]">Indicator</th>
+            <th className="px-4 py-2 text-[10px] font-medium text-slate-600 uppercase tracking-[0.14em]">Type</th>
+            <th className="px-4 py-2 text-[10px] font-medium text-slate-600 uppercase tracking-[0.14em]">Action</th>
+            <th className="px-4 py-2 text-[10px] font-medium text-slate-600 uppercase tracking-[0.14em]">Threats</th>
+            <th className="px-6 py-2 text-right text-[10px] font-medium text-slate-600 uppercase tracking-[0.14em]">Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((indicator: Indicator) => (
+            <tr
+              key={indicator.id}
+              className="cursor-pointer border-b border-white/[0.03] transition-colors hover:bg-white/[0.025]"
+            >
+              <td className="px-4 py-2 font-mono text-[12px] text-[#ef7c68]">
+                <Link
+                  href={`/indicator/${encodeURIComponent(indicator.value)}`}
+                  className="hover:underline focus-visible:outline-2 focus-visible:outline-[#ef7c68]"
+                >
+                  {indicator.value}
+                </Link>
+              </td>
+              <td className="px-4 py-2 font-mono text-[11px] text-slate-400">
+                {indicator.type.toUpperCase()}
+              </td>
+              <td className="px-4 py-2 text-[11px]">
+                {indicator.recommendation === "block" ? (
+                  <span className="text-[#ef7c68] font-semibold">BLOCK</span>
+                ) : indicator.recommendation === "monitor" ? (
+                  <span className="text-yellow-500 font-semibold">MONITOR</span>
+                ) : (
+                  <span className="text-slate-500 font-semibold">UNKNOWN</span>
+                )}
+              </td>
+              <td className="px-4 py-2 text-[11px] text-slate-300">
+                <div className="flex flex-wrap gap-1.5">
+                  {indicator.threat_types?.slice(0, 3).map((t) => (
+                    <span
+                      key={t}
+                      className="rounded border border-white/[0.08] bg-white/[0.025] px-2 py-0.5 capitalize"
+                    >
+                      {t.replace(/_/g, ' ')}
+                    </span>
+                  ))}
+                </div>
+              </td>
+              <td className="whitespace-nowrap px-6 py-2 text-right font-mono text-[10px] text-slate-500">
+                {new Date(indicator.updated_at).toLocaleString('en-US', { timeZone: 'UTC' })} UTC
+              </td>
             </tr>
-          </thead>
-          <tbody className="divide-y divide-white/5">
-            {data.map((indicator: Indicator) => (
-              <tr
-                key={indicator.id}
-                className="hover:bg-white/5 transition-colors group"
-              >
-                <td className="px-4 py-3">
-                  <Link
-                    href={`/indicator/${encodeURIComponent(indicator.value)}`}
-                    className="font-mono text-blue-400 hover:text-blue-300 transition-colors"
-                  >
-                    {indicator.value}
-                  </Link>
-                </td>
-                <td className="px-4 py-3 text-gray-400 uppercase text-xs">
-                  {indicator.type}
-                </td>
-                <td className="px-4 py-3">
-                  {indicator.recommendation === "block" ? (
-                    <span className="badge badge-red">Block</span>
-                  ) : indicator.recommendation === "monitor" ? (
-                    <span className="badge badge-yellow">Monitor</span>
-                  ) : (
-                    <span className="badge badge-gray">Unknown</span>
-                  )}
-                </td>
-                <td className="px-4 py-3 text-gray-400">
-                  {indicator.source_count}
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex gap-1 flex-wrap max-w-[200px] overflow-hidden">
-                    {indicator.threat_types?.slice(0, 2).map((t) => (
-                      <span
-                        key={t}
-                        className="px-2 py-0.5 rounded text-[10px] bg-white/10 text-gray-300"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                    {indicator.threat_types && indicator.threat_types.length > 2 && (
-                      <span className="text-gray-500 text-xs">
-                        +{indicator.threat_types.length - 2}
-                      </span>
-                    )}
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-gray-500 text-xs">
-                  {new Date(indicator.updated_at).toLocaleString()}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

@@ -16,44 +16,44 @@ export default function StatsBar({ stats }: StatsProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-      <div className="glass rounded-xl p-4 flex items-center justify-between">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="rounded-md border border-white/[0.08] bg-[#0d131a] p-4 flex items-center justify-between">
         <div>
-          <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
-            Indicators
+          <p className="text-[10px] text-slate-500 uppercase tracking-[0.14em] font-medium">
+            Active Indicators
           </p>
-          <p className="text-2xl font-bold text-white mt-1">
+          <p className="text-xl font-mono text-[#ef7c68] mt-1">
             {formatNumber(stats.indicators)}
           </p>
         </div>
-        <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-          <ShieldAlert className="w-5 h-5 text-blue-400" />
+        <div className="w-8 h-8 rounded bg-[#ef7c68]/10 flex items-center justify-center border border-[#ef7c68]/20">
+          <ShieldAlert className="w-4 h-4 text-[#ef7c68]" />
         </div>
       </div>
 
-      <div className="glass rounded-xl p-4 flex items-center justify-between">
+      <div className="rounded-md border border-white/[0.08] bg-[#0d131a] p-4 flex items-center justify-between">
         <div>
-          <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
-            Evidence Records
+          <p className="text-[10px] text-slate-500 uppercase tracking-[0.14em] font-medium">
+            Threat Observations
           </p>
-          <p className="text-2xl font-bold text-white mt-1">
+          <p className="text-xl font-mono text-[#ef7c68] mt-1">
             {formatNumber(stats.evidence)}
           </p>
         </div>
-        <div className="w-10 h-10 rounded-full bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
-          <Database className="w-5 h-5 text-cyan-400" />
+        <div className="w-8 h-8 rounded bg-[#ef7c68]/10 flex items-center justify-center border border-[#ef7c68]/20">
+          <Database className="w-4 h-4 text-[#ef7c68]" />
         </div>
       </div>
 
-      <div className="glass rounded-xl p-4 flex items-center justify-between">
+      <div className="rounded-md border border-white/[0.08] bg-[#0d131a] p-4 flex items-center justify-between">
         <div>
-          <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
-            Active Sources
+          <p className="text-[10px] text-slate-500 uppercase tracking-[0.14em] font-medium">
+            Live Feeds
           </p>
-          <p className="text-2xl font-bold text-white mt-1">{stats.sources}</p>
+          <p className="text-xl font-mono text-[#ef7c68] mt-1">{stats.sources}</p>
         </div>
-        <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20">
-          <Activity className="w-5 h-5 text-green-400" />
+        <div className="w-8 h-8 rounded bg-[#ef7c68]/10 flex items-center justify-center border border-[#ef7c68]/20">
+          <Activity className="w-4 h-4 text-[#ef7c68]" />
         </div>
       </div>
     </div>
