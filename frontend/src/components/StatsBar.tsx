@@ -16,45 +16,47 @@ export default function StatsBar({ stats }: StatsProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div className="rounded-md border border-white/[0.08] bg-[#0d131a] p-4 flex items-center justify-between">
-        <div>
-          <p className="text-[10px] text-slate-500 uppercase tracking-[0.14em] font-medium">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="glass-card p-6 flex flex-col gap-3 group glass-hover transition-all">
+        <div className="flex items-center justify-between">
+          <p className="text-[11px] text-slate-400 font-semibold tracking-[0.2em] uppercase">
             Active Indicators
           </p>
-          <p className="text-xl font-mono text-[#ef7c68] mt-1">
-            {formatNumber(stats.indicators)}
-          </p>
+          <div className="w-8 h-8 rounded bg-[#F43F5E]/10 flex items-center justify-center border border-[#F43F5E]/30 group-hover:bg-[#F43F5E]/20 transition-colors">
+            <ShieldAlert className="w-4 h-4 text-[#F43F5E]" />
+          </div>
         </div>
-        <div className="w-8 h-8 rounded bg-[#ef7c68]/10 flex items-center justify-center border border-[#ef7c68]/20">
-          <ShieldAlert className="w-4 h-4 text-[#ef7c68]" />
-        </div>
+        <p className="text-3xl font-mono font-bold text-white tracking-tight">
+          {formatNumber(stats.indicators)}
+        </p>
       </div>
 
-      <div className="rounded-md border border-white/[0.08] bg-[#0d131a] p-4 flex items-center justify-between">
-        <div>
-          <p className="text-[10px] text-slate-500 uppercase tracking-[0.14em] font-medium">
+      <div className="glass-card p-6 flex flex-col gap-3 group glass-hover transition-all">
+        <div className="flex items-center justify-between">
+          <p className="text-[11px] text-slate-400 font-semibold tracking-[0.2em] uppercase">
             Threat Observations
           </p>
-          <p className="text-xl font-mono text-[#ef7c68] mt-1">
-            {formatNumber(stats.evidence)}
-          </p>
+          <div className="w-8 h-8 rounded bg-[#06B6D4]/10 flex items-center justify-center border border-[#06B6D4]/30 group-hover:bg-[#06B6D4]/20 transition-colors">
+            <Database className="w-4 h-4 text-[#06B6D4]" />
+          </div>
         </div>
-        <div className="w-8 h-8 rounded bg-[#ef7c68]/10 flex items-center justify-center border border-[#ef7c68]/20">
-          <Database className="w-4 h-4 text-[#ef7c68]" />
-        </div>
+        <p className="text-3xl font-mono font-bold text-white tracking-tight">
+          {formatNumber(stats.evidence)}
+        </p>
       </div>
 
-      <div className="rounded-md border border-white/[0.08] bg-[#0d131a] p-4 flex items-center justify-between">
-        <div>
-          <p className="text-[10px] text-slate-500 uppercase tracking-[0.14em] font-medium">
+      <div className="glass-card p-6 flex flex-col gap-3 group glass-hover transition-all">
+        <div className="flex items-center justify-between">
+          <p className="text-[11px] text-slate-400 font-semibold tracking-[0.2em] uppercase">
             Live Feeds
           </p>
-          <p className="text-xl font-mono text-[#ef7c68] mt-1">{stats.sources}</p>
+          <div className="w-8 h-8 rounded bg-[#F59E0B]/10 flex items-center justify-center border border-[#F59E0B]/30 group-hover:bg-[#F59E0B]/20 transition-colors">
+            <Activity className="w-4 h-4 text-[#F59E0B]" />
+          </div>
         </div>
-        <div className="w-8 h-8 rounded bg-[#ef7c68]/10 flex items-center justify-center border border-[#ef7c68]/20">
-          <Activity className="w-4 h-4 text-[#ef7c68]" />
-        </div>
+        <p className="text-3xl font-mono font-bold text-white tracking-tight">
+          {stats.sources}
+        </p>
       </div>
     </div>
   );

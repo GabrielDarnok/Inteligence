@@ -31,7 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.className} bg-[#070a0f] text-slate-100 min-h-screen selection:bg-[#ef7c68]/30 selection:text-white`}>
+      <body className={`${inter.className} min-h-screen selection:bg-[#06B6D4]/30 selection:text-white glow-bg`}>
         <Navbar />
         <main className="dashboard-shell max-w-[1800px] mx-auto min-h-[calc(100vh-4rem)]">
           {children}

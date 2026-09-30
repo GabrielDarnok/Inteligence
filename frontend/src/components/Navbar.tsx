@@ -19,12 +19,12 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav className="sticky top-0 z-50 shrink-0 border-b border-white/[0.065] bg-[#080c11]/90 backdrop-blur-xl">
+    <nav className="sticky top-0 z-50 shrink-0 border-b border-white/[0.04] bg-[#0B0F19]/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-[1800px] flex-wrap items-center px-4 sm:px-6">
         <div aria-label="Shadow Inteligence Activity Monitor" className="order-1 flex h-16 items-center">
           <Link href="/" className="flex items-center gap-2 group">
-            <span className="text-[15px] font-semibold tracking-[-0.02em] text-white">
-              Shadow Inteligence<span className="font-normal text-slate-500 ml-1">Botnet Activity Monitor</span>
+            <span className="text-[15px] font-bold tracking-[-0.02em] text-white">
+              Shadow Inteligence<span className="font-normal text-[#06B6D4] ml-2 opacity-80">SOC</span>
             </span>
           </Link>
         </div>
@@ -42,7 +42,7 @@ export default function Navbar() {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-11 items-center gap-1.5 border-b px-0 text-xs sm:gap-2 sm:text-sm font-medium transition-colors sm:px-1 md:h-16 border-transparent text-slate-500 hover:text-slate-300"
+                className="flex h-11 items-center gap-1.5 border-b-2 px-0 text-xs sm:gap-2 sm:text-sm font-medium transition-colors sm:px-1 md:h-16 border-transparent text-slate-400 hover:text-white"
               >
                 <Icon className="w-3.5 h-3.5" />
                 <span className="sm:hidden">{link.label}</span>
@@ -52,10 +52,10 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`flex h-11 items-center gap-1.5 border-b px-0 text-xs sm:gap-2 sm:text-sm font-medium transition-colors sm:px-1 md:h-16 ${
+                className={`flex h-11 items-center gap-1.5 border-b-2 px-0 text-xs sm:gap-2 sm:text-sm font-medium transition-colors sm:px-1 md:h-16 ${
                   isActive
-                    ? "border-[#ef7c68] text-slate-100"
-                    : "border-transparent text-slate-500 hover:text-slate-300"
+                    ? "border-[#06B6D4] text-white"
+                    : "border-transparent text-slate-400 hover:text-white"
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -67,10 +67,10 @@ export default function Navbar() {
         </div>
         
         <div className="dashboard-nav-status order-3 ml-auto flex min-h-16 flex-wrap items-center justify-end gap-x-5 gap-y-3 py-3 md:order-4">
-          <span className="hidden text-[11px] text-slate-500 sm:inline flex items-center gap-1.5">
+          <span className="hidden text-[11px] text-slate-400 sm:inline flex items-center gap-1.5 font-mono">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ef7c68] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ef7c68]"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#06B6D4] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#06B6D4]"></span>
             </span>
             SYSTEM ONLINE
           </span>
