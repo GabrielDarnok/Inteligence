@@ -1,4 +1,4 @@
-# Open Threat Intelligence Aggregator (OTI)
+# Shadow Inteligence
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
@@ -9,20 +9,19 @@ An **open source Threat Intelligence aggregation platform** that centralizes inf
 
 ## The Problem
 
-An analyst evaluating an IP today must query multiple sources individually — Shadowserver, GreyNoise, ThreatFox, Spamhaus, URLhaus — each with its own format, API, terminology, and update frequency.
+An analyst evaluating an IP today must query multiple sources individually — AlienVault, AbuseIPDB, ThreatFox, Blocklist.de — each with its own format, API, terminology, and update frequency.
 
 ## The Solution
 
 A single platform that:
 
-1. Automatically collects data from multiple sources
+1. Automatically collects data from multiple sources in batch
 2. Normalizes different formats
 3. Deduplicates indicators
 4. Correlates information from the same indicator
 5. Preserves the origin of each piece of information
-6. Maintains history
-7. Provides a REST API and web interface
-8. Generates explainable assessments and recommendations
+6. Provides a REST API and a premium Next.js web interface
+7. Includes native AI Agent support (`/llms.txt`)
 
 ## Architecture (100% Serverless)
 
@@ -32,7 +31,7 @@ The project is designed to be deployed for free (or very cheap) using modern ser
 GITHUB ACTIONS (Ingestion Engine)
     │  - Python scripts running via Cron
     │  - Fetches data from Threat sources
-    │  - Writes directly to Supabase
+    │  - Batch processes & writes directly to Supabase
     ▼
 SUPABASE (Database)
     │  - PostgreSQL + Row Level Security
@@ -48,12 +47,12 @@ VERCEL (Next.js App)
 
 | Source | Type | Auth Required |
 |---|---|---|
+| AlienVault OTX | Pulses, Malware, Scanners | No |
+| AbuseIPDB | Scanners, Brute Force, Malicious IPs | No |
+| Blocklist.de | Brute Force, Botnets, Scanners | No |
 | ThreatFox (abuse.ch) | IOCs, C2, Malware | No |
-| URLhaus (abuse.ch) | Malicious URLs | No |
 | Feodo Tracker (abuse.ch) | C2, Botnets | No |
-| CISA KEV | Known Exploited Vulnerabilities | No |
-| GreyNoise | Scanner / Malicious IPs | API Key (free tier) |
-| Shadowserver | DDoS, Botnets, Scanners | API Key (registration) |
+| URLhaus (abuse.ch) | Malicious URLs | No |
 
 ## Supported Indicator Types
 
@@ -61,8 +60,6 @@ VERCEL (Next.js App)
 - Domain
 - URL
 - MD5 / SHA1 / SHA256
-- ASN
-- Certificate
 
 ## Getting Started (Deployment)
 
@@ -89,21 +86,21 @@ VERCEL (Next.js App)
 2. Add the following Repository Secrets:
    - `SUPABASE_URL`: Your Supabase Project URL
    - `SUPABASE_SERVICE_KEY`: Your Supabase service_role key
-   - `GREYNOISE_API_KEY`: (Optional) Your GreyNoise API key
-   - `SHADOWSERVER_API_KEY`: (Optional) Your Shadowserver API key
-   - `SHADOWSERVER_API_SECRET`: (Optional) Your Shadowserver API secret
-3. The ingestion engine will run automatically every 6 hours via GitHub Actions.
+3. The ingestion engine will run automatically on schedule via GitHub Actions.
 4. You can also trigger it manually in the Actions tab.
 
-## API Examples
+## API & Agent Support
 
-The frontend hosts the public API. If your Vercel app is at `oti.vercel.app`:
+Shadow Inteligence natively supports automated agents (like ChatGPT, Claude, LangChain bots) via the industry standard `llms.txt`. 
+
+If your app is deployed at `inteligence.vercel.app`, agents can read `https://inteligence.vercel.app/llms.txt` to instantly understand the system and interact with the endpoints:
 
 ```http
-GET https://oti.vercel.app/api/v1/indicator/1.2.3.4
-GET https://oti.vercel.app/api/v1/assessment/1.2.3.4
-GET https://oti.vercel.app/api/v1/feeds/malicious-ip.txt
-GET https://oti.vercel.app/api/v1/feeds/malicious-ip.json
+# Fetch an Indicator Assessment
+GET https://inteligence.vercel.app/api/v1/indicator/1.1.1.1
+
+# Fetch Latest Threat Types (with optional pagination & source filtering)
+GET https://inteligence.vercel.app/api/v1/threats/brute%20force?limit=10&sources=blocklist_de
 ```
 
 ## Contributing
