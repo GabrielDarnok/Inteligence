@@ -28,9 +28,6 @@ export default function Navbar() {
             <div className="flex items-center justify-center w-8 h-8 overflow-hidden rounded-md bg-black">
               <Image src="/logo.jpg" alt="Logo" width={64} height={64} className="scale-[1.8] opacity-90 group-hover:opacity-100 transition-opacity" priority />
             </div>
-            <span className="text-[14px] font-medium tracking-tight text-[var(--text-primary)]">
-              Shadow Inteligence
-            </span>
           </Link>
         </div>
         
