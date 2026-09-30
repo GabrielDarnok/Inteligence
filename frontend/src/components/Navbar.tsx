@@ -24,11 +24,11 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 shrink-0 border-b border-[var(--border-color)] bg-[var(--bg-main)]">
       <div className="mx-auto flex max-w-[1400px] flex-wrap items-center px-4 sm:px-6">
         <div aria-label="Shadow Inteligence" className="order-1 flex h-14 items-center">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="flex items-center justify-center -ml-2">
-              <Image src="/logo.jpg" alt="Logo" width={48} height={48} className="rounded-sm opacity-90 group-hover:opacity-100 transition-opacity" priority />
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="flex items-center justify-center w-8 h-8 overflow-hidden rounded-md bg-black">
+              <Image src="/logo.jpg" alt="Logo" width={64} height={64} className="scale-[1.8] opacity-90 group-hover:opacity-100 transition-opacity" priority />
             </div>
-            <span className="text-[14px] font-medium tracking-tight text-[var(--text-primary)] -ml-2">
+            <span className="text-[14px] font-medium tracking-tight text-[var(--text-primary)]">
               Shadow Inteligence
             </span>
           </Link>
