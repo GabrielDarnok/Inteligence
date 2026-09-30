@@ -16,7 +16,7 @@ from registry import register_connector
 
 logger = structlog.get_logger()
 
-OTX_URL = "https://otx.alienvault.com/api/v1/pulses/subscribed"
+OTX_URL = "https://otx.alienvault.com/api/v1/pulses/activity"
 
 
 @register_connector
@@ -37,7 +37,7 @@ class AlienVaultOTXConnector(BaseConnector):
             logger.warning("AlienVault OTX: no API key configured, skipping")
             return
 
-        logger.info("AlienVault OTX: downloading subscribed pulses")
+        logger.info("AlienVault OTX: downloading recent activity pulses")
 
         headers = {
             "X-OTX-API-KEY": api_key,
