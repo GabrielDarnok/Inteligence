@@ -21,6 +21,10 @@ export const metadata: Metadata = {
     description: "Search threat indicators across multiple public sources",
     type: "website",
   },
+  icons: {
+    icon: "/logo.jpg",
+    apple: "/logo.jpg",
+  },
 };
 
 export default function RootLayout({
