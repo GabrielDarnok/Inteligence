@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Shadow Inteligence",
+  title: "Shadow Intelligence",
   description:
     "A live view of threat observations and malicious indicators across the global network.",
   keywords: [
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     "OSINT",
   ],
   openGraph: {
-    title: "Shadow Inteligence — Threat Intelligence Platform",
+    title: "Shadow Intelligence — Threat Intelligence Platform",
     description: "Search threat indicators across multiple public sources",
     type: "website",
   },
@@ -37,7 +37,7 @@ export default function RootLayout({
         </main>
         <footer className="border-t border-[var(--border-color)] mt-16 py-8 text-center text-[11px] text-[var(--text-secondary)]">
           <p>
-            Shadow Inteligence &mdash; Live telemetry and Threat Activity Monitor.{" "}
+            Shadow Intelligence &mdash; Live telemetry and Threat Activity Monitor.{" "}
             <a
               href="https://github.com/GabrielDarnok/Inteligence"
               className="text-[#ef7c68] hover:text-[#f1735f] transition-colors"

@@ -20,7 +20,7 @@ export default async function SourcesPage() {
       <div className="space-y-2 pb-4">
         <h1 className="text-xl font-bold tracking-tight text-[var(--text-primary)]">Data Sources</h1>
         <p className="text-[var(--text-secondary)] text-sm max-w-3xl leading-relaxed">
-          Shadow Inteligence aggregates live threat intelligence from the following public feeds and communities.
+          Shadow Intelligence aggregates live threat intelligence from the following public feeds and communities.
         </p>
       </div>
 

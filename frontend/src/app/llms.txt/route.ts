@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const content = `# Shadow Inteligence (Global Threat Radar)
+  const content = `# Shadow Intelligence (Global Threat Radar)
 
-Shadow Inteligence is an Open Threat Intelligence Aggregator. It aggregates, normalizes, and scores malicious IPs, URLs, hashes, and domains from top global intelligence feeds (like AbuseIPDB, ThreatFox, Blocklist.de, AlienVault) in real-time.
+Shadow Intelligence is an Open Threat Intelligence Aggregator. It aggregates, normalizes, and scores malicious IPs, URLs, hashes, and domains from top global intelligence feeds (like AbuseIPDB, ThreatFox, Blocklist.de, AlienVault) in real-time.
 
 ## API Documentation
 

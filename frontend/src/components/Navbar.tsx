@@ -23,7 +23,7 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 shrink-0 border-b border-[var(--border-color)] bg-[var(--bg-main)]">
       <div className="mx-auto flex max-w-[1400px] flex-wrap items-center px-4 sm:px-6">
-        <div aria-label="Shadow Inteligence" className="order-1 flex h-14 items-center">
+        <div aria-label="Shadow Intelligence" className="order-1 flex h-14 items-center">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="flex items-center justify-center w-8 h-8 overflow-hidden rounded-md bg-black">
               <Image src="/logo.jpg" alt="Logo" width={64} height={64} className="scale-[1.8] opacity-90 group-hover:opacity-100 transition-opacity" priority />

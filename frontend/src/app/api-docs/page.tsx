@@ -2,8 +2,8 @@ import { Terminal, Copy, Shield, Database, Activity } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "API Documentation | Shadow Inteligence",
-  description: "REST API documentation for Shadow Inteligence threat data.",
+  title: "API Documentation | Shadow Intelligence",
+  description: "REST API documentation for Shadow Intelligence threat data.",
 };
 
 const endpoints = [
@@ -49,7 +49,7 @@ const endpoints = [
     params: [
       { name: "filename", type: "string", description: "Currently supports: malicious-ip.txt" }
     ],
-    response: `# Shadow Inteligence Threat Feed
+    response: `# Shadow Intelligence Threat Feed
 # Generated: 2024-01-01T00:00:00Z
 # Format: IP Address
 82.158.89.252
@@ -87,7 +87,7 @@ export default function ApiDocsPage() {
           API Reference
         </h1>
         <p className="text-[var(--text-secondary)] text-[13px] leading-relaxed max-w-2xl">
-          Integrate Shadow Inteligence threat data directly into your security playbooks, firewalls, and SIEMs using our public REST API. No authentication required for basic access.
+          Integrate Shadow Intelligence threat data directly into your security playbooks, firewalls, and SIEMs using our public REST API. No authentication required for basic access.
         </p>
       </div>
 

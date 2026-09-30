@@ -1,4 +1,4 @@
-# Shadow Inteligence
+# Shadow Intelligence
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
@@ -91,7 +91,7 @@ VERCEL (Next.js App)
 
 ## API & Agent Support
 
-Shadow Inteligence natively supports automated agents (like ChatGPT, Claude, LangChain bots) via the industry standard `llms.txt`. 
+Shadow Intelligence natively supports automated agents (like ChatGPT, Claude, LangChain bots) via the industry standard `llms.txt`. 
 
 If your app is deployed at `inteligence.vercel.app`, agents can read `https://inteligence.vercel.app/llms.txt` to instantly understand the system and interact with the endpoints:
 
